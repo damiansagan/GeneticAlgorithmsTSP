@@ -4,7 +4,6 @@ package com.labspec.mieczkowskasagan;
 import java.util.*;
 
 public class Solution implements Comparable<Solution>{
-    //comparator albo comparable tak zeby bylo sortowanie
 
     public static class Comparators {
 
