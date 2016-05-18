@@ -1,5 +1,6 @@
 package com.labspec.mieczkowskasagan;
 
+import java.util.Collections;
 import java.util.List;
 
 public class Algorithm {
@@ -8,17 +9,20 @@ public class Algorithm {
 
 
     public Algorithm() {
-        region = new RegionMatrix(4);
-        solutionList = Solution.produce(3,region);
+        region = new RegionMatrix(10);
+        solutionList = Solution.produce(10,region);
     }
 
     public void testPrint(){
+        System.out.println();
         System.out.println(region);
+        Collections.sort(solutionList);
         System.out.println(solutionList.toString().replaceAll("},", "}," + System.getProperty("line.separator")));
-        for(Solution s : solutionList){
-            System.out.println(s.computeFitness());
-        }
         System.out.println(Solution.makeOffspringFrom(solutionList.get(0),solutionList.get(1)));
+    }
+
+    public int getParameterP(){
+        return solutionList.size();
     }
 
 }
