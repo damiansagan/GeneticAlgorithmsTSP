@@ -6,9 +6,11 @@ import java.util.List;
 class Algorithm {
     //variables
     private final Region region;
-    private List<Solution> solutionList;
-    private int currentNumberOfGenerations = 0;
-    private int currentMinimalFitnessSeries = Integer.MAX_VALUE;
+    private List<Solution> solutionList; //population
+
+    private int currentNumberOfGeneration = 0;
+    private int currentMinimalFitness = Integer.MAX_VALUE;
+
 
     //parameters
     private final int generationsRequired;
@@ -29,8 +31,8 @@ class Algorithm {
     }
 
     public boolean isFinished(){
-        currentNumberOfGenerations++;
-        if(currentNumberOfGenerations>=generationsRequired || currentMinimalFitnessSeries<=maximalAcceptableFitness){
+        currentNumberOfGeneration++;
+        if(currentNumberOfGeneration >=generationsRequired || currentMinimalFitness <=maximalAcceptableFitness){
             System.out.println(this);
             return true;
         }
@@ -52,12 +54,14 @@ class Algorithm {
     public int getNumberOfSolutions(){
         return solutionList.size();
     }
+    public int getGeneration() { return currentNumberOfGeneration;  }
+    public int getMinimalFitness() { return currentMinimalFitness; }
 
     @Override
     public String toString() {
         return "Algorithm{" +
-                "currentMinimalFitnessSeries=" + currentMinimalFitnessSeries +
-                ", currentNumberOfGenerations=" + currentNumberOfGenerations +
+                "currentMinimalFitness=" + currentMinimalFitness +
+                ", currentNumberOfGeneration=" + currentNumberOfGeneration +
                 '}';
     }
 }
