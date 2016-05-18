@@ -10,21 +10,27 @@ public class Solution {
     private int fitness;
     private List<Integer> series;
 
-    public Solution(List<Integer> listOfCities) {
-        this.series = new ArrayList<>(listOfCities);
+    public Solution(Region region) {
+        this.series = new ArrayList<>(region.getListOfCities());
         Collections.shuffle(series);
         this.fitness = getFitness();
     }
+
+    //public Solution(int N)
 
     public int getFitness(){
         //there will be fitness computing method
         return 0;
     }
 
+    public void mutate(){
+        //there will be implemented mutation algorithm
+    }
+
     public static List<Solution> produce(int numberOfSolutions, Region region){
-        List<Solution> result = new ArrayList<>(region.getNumberOfCities());
+        List<Solution> result = new ArrayList<>(numberOfSolutions);
         for(int i = 0; i<numberOfSolutions; i++){
-            result.add(new Solution(region.getListOfCities()));
+            result.add(new Solution(region));
         }
         return result;
     }

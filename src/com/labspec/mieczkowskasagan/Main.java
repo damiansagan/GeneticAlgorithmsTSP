@@ -5,7 +5,7 @@ import java.util.List;
 public class Main {
 
     public static void main(String[] args) {
-        Region region = new RegionMatrix(10);
+        Region region = new RegionArray(10);
         System.out.println(region);
 
         List<Solution> solutionList = Solution.produce(20,region);
