@@ -1,15 +1,27 @@
 package com.labspec.mieczkowskasagan;
 
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.ListIterator;
+import java.util.*;
 
-public class Solution {
+public class Solution implements Comparable<Solution>{
     //comparator albo comparable tak zeby bylo sortowanie
 
-    private int fitness;
+    public static class Comparators {
+
+        public static Comparator<Solution> FITNESS = new Comparator<Solution>() {
+            @Override
+            public int compare(Solution solution1, Solution solution2) {
+                return solution1.fitness.compareTo(solution2.fitness);
+            }
+        };
+    }
+
+    @Override
+    public int compareTo(Solution solution) {
+        return Comparators.FITNESS.compare(this, solution);
+    }
+
+    private Integer fitness;
     private List<Integer> series;
     private Region region;
 
@@ -19,6 +31,7 @@ public class Solution {
         Collections.shuffle(series);
         this.fitness = computeFitness();
     }
+
 
     public static List<Solution> makeOffspringFrom(Solution solution1, Solution solution2){
         //DOROTA
