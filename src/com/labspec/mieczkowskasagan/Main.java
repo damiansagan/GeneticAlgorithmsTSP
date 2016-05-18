@@ -1,15 +1,12 @@
 package com.labspec.mieczkowskasagan;
 
-import java.util.List;
-
 public class Main {
 
     public static void main(String[] args) {
-        Region region = new RegionMatrix(10);
-        System.out.println(region);
+        Algorithm algorithm = new Algorithm();
 
-        List<Solution> solutionList = Solution.produce(20,region);
-        System.out.println(solutionList.toString().replaceAll("},", "}," + System.getProperty("line.separator")));
+
+        algorithm.testPrint();
 
 
     }
