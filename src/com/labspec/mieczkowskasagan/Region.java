@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
 
-public abstract class Region {
+abstract class Region {
 
     protected int numberOfCities;
     protected final List<Integer> listOfCities;

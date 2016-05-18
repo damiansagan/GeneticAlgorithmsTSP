@@ -4,11 +4,11 @@ import java.util.Arrays;
 import java.util.Random;
 
 
-public class RegionMatrix extends Region {
+class RegionMatrix extends Region {
 
     private int[][] distancesBetweenCities;
 
-    public RegionMatrix(int numberOfCities) {
+    RegionMatrix(int numberOfCities) {
         super(numberOfCities);
 
         Random generator = new Random();

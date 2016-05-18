@@ -3,7 +3,7 @@ package com.labspec.mieczkowskasagan;
 
 import java.util.*;
 
-public class Solution implements Comparable<Solution>{
+class Solution implements Comparable<Solution>{
 
     private Integer fitness;
     private List<Integer> series;
@@ -11,7 +11,7 @@ public class Solution implements Comparable<Solution>{
 
     public Solution(Region region) {
         this.region = region;
-        this.series = new ArrayList<>(region.getListOfCities());
+        this.series = new ArrayList<>(region.listOfCities);
         Collections.shuffle(series);
         this.fitness = computeFitness();
     }
@@ -23,7 +23,7 @@ public class Solution implements Comparable<Solution>{
     }
 
 
-    public int computeFitness(){
+    private int computeFitness(){
         //there will be fitness computing method
         if(series == null || series.isEmpty()) throw new IllegalStateException();
         final ListIterator<Integer> iterator = series.listIterator();
