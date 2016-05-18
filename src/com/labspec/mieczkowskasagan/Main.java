@@ -24,7 +24,7 @@ public class Main {
             @Override
             public void run() {
                 // create GUI object
-                ChartManager chartManagerGenetic = new ChartManager(chartSeriesGenetic);
+                ChartManager chartManagerGenetic = new ChartManager(chartSeriesGenetic,"generation number","fitness");
                 startJFrame(chartManagerGenetic);
             }
         });

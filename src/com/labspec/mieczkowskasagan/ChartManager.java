@@ -16,14 +16,10 @@ class ChartManager {
     private JFreeChart chart;
     private ChartPanel chartPanel;
 
-    ChartManager(XYSeries series) {
-        createChart(series);
-    }
-
-    private void createChart(XYSeries series) {
+    ChartManager(XYSeries series, String xAxis, String yAxis) {
         chart = ChartFactory.createXYLineChart(null, // Title
-                "generation number", // X-Axis label
-                "fitness", // Y-Axis label
+                xAxis, // X-Axis label
+                yAxis, // Y-Axis label
                 new XYSeriesCollection(series), // Dataset
                 PlotOrientation.VERTICAL, // Plot orientation
                 false, // show legend
