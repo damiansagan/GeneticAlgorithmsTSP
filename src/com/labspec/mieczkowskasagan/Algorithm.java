@@ -9,12 +9,16 @@ public class Algorithm {
 
 
     public Algorithm() {
-        region = new RegionMatrix(10);
+        region = new RegionMatrix(20);
         solutionList = Solution.produce(10,region);
     }
 
     public void testPrint(){
-        System.out.println();
+//        Solution s = new Solution(region);
+//        System.out.println(s);
+//        s.mutate(20);
+//        System.out.println(s);
+
         System.out.println(region);
         Collections.sort(solutionList);
         System.out.println(solutionList.toString().replaceAll("},", "}," + System.getProperty("line.separator")));

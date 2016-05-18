@@ -9,6 +9,7 @@ public abstract class Region {
 
     protected int numberOfCities;
     protected final List<Integer> listOfCities;
+    protected final int maxDistanceBetween = 100;
 
     protected Region(int numberOfCities) {
         this.numberOfCities = numberOfCities;

@@ -16,7 +16,7 @@ public class RegionMatrix extends Region {
         for(int i = 0; i<numberOfCities; i++){
             distancesBetweenCities[i][i]=0;
             for(int j = i+1; j<numberOfCities; j++){
-                int rand = Math.abs(generator.nextInt()%100);
+                int rand = Math.abs(generator.nextInt(maxDistanceBetween+1));
                 distancesBetweenCities[i][j]=rand;
                 distancesBetweenCities[j][i]=rand;
             }

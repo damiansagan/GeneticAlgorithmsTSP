@@ -5,21 +5,6 @@ import java.util.*;
 
 public class Solution implements Comparable<Solution>{
 
-    public static class Comparators {
-
-        public static Comparator<Solution> FITNESS = new Comparator<Solution>() {
-            @Override
-            public int compare(Solution solution1, Solution solution2) {
-                return solution1.fitness.compareTo(solution2.fitness);
-            }
-        };
-    }
-
-    @Override
-    public int compareTo(Solution solution) {
-        return Comparators.FITNESS.compare(this, solution);
-    }
-
     private Integer fitness;
     private List<Integer> series;
     private Region region;
@@ -54,9 +39,25 @@ public class Solution implements Comparable<Solution>{
         return sum;
     }
 
-    public void mutate(int numberOfMutations){
+    public void mutate(int percentage){
         //there will be implemented mutation algorithm
-        //DAMIAN
+        int numberOfMutations = (int)Math.ceil(0.01*percentage*series.size());
+        if(numberOfMutations<1 || series==null || series.size()<2) return; //makes no sense to go further
+        Random generator = new Random();
+        int firstID = generator.nextInt(series.size());
+        int lastID = firstID;
+        int lastValue = series.get(lastID);
+        for(int i = 0; i<numberOfMutations; i++){
+            int currentID = generator.nextInt(series.size());
+            while(currentID==lastID){ //can't be itself
+                currentID = generator.nextInt(series.size());
+            }
+            int currentValue = series.get(currentID);
+            series.set(currentID,lastValue);
+            lastValue=currentValue;
+            lastID=currentID;
+        }
+        series.set(firstID,lastValue);
     }
 
     public static List<Solution> produce(int numberOfSolutions, Region region){
@@ -78,4 +79,20 @@ public class Solution implements Comparable<Solution>{
     public int getFitness() {
         return fitness;
     }
+
+    public static class Comparators {
+
+        public static Comparator<Solution> FITNESS = new Comparator<Solution>() {
+            @Override
+            public int compare(Solution solution1, Solution solution2) {
+                return solution1.fitness.compareTo(solution2.fitness);
+            }
+        };
+    }
+
+    @Override
+    public int compareTo(Solution solution) {
+        return Comparators.FITNESS.compare(this, solution);
+    }
+
 }
