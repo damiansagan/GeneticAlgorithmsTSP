@@ -9,7 +9,7 @@ public class RegionMatrix extends Region {
     private int[][] distancesBetweenCities;
 
     public RegionMatrix(int numberOfCities) {
-        this.numberOfCities = numberOfCities;
+        super(numberOfCities);
 
         Random generator = new Random();
         this.distancesBetweenCities = new int[numberOfCities][numberOfCities];
