@@ -12,13 +12,13 @@ public class Main {
         XYSeries chartSeriesGenetic = new XYSeries("genetic");
         Algorithm algorithm = new Algorithm(
                 10, //numberOfChromosomes
-                5, //initialPopulation
+                5000, //initialPopulation
                 10, //generationsRequired
-                5000, //maximalAcceptableFitness
+                100, //maximalAcceptableFitness
                 0.05, //coefficientOfMutantsEachGeneration
-                0.10 //coefficientOfMutatedGenesInChromosomes
+                0.50 //coefficientOfMutatedGenesInChromosomes
         );
-        algorithm.testPrint();
+        //algorithm.testPrint();
 
         while(!algorithm.isFinished()){
             algorithm.naturalSelection();

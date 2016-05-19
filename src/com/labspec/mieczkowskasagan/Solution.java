@@ -4,6 +4,7 @@ package com.labspec.mieczkowskasagan;
 import java.util.*;
 
 class Solution implements Comparable<Solution>{
+    private static final Random generator = new Random();
 
     private Integer fitness;
     private List<Integer> series;
@@ -13,7 +14,6 @@ class Solution implements Comparable<Solution>{
         this.region = region;
         this.series = new ArrayList<>(region.listOfCities);
         Collections.shuffle(series);
-        this.fitness = computeFitness();
     }
 
 
@@ -23,7 +23,7 @@ class Solution implements Comparable<Solution>{
     }
 
 
-    private int computeFitness(){
+    private Integer computeFitness(){
         //there will be fitness computing method
         if(series == null || series.isEmpty()) throw new IllegalStateException();
         final ListIterator<Integer> iterator = series.listIterator();
@@ -39,11 +39,10 @@ class Solution implements Comparable<Solution>{
         return sum;
     }
 
-    public void mutate(int coefficient){
+    public void mutate(double coefficient){
         //there will be implemented mutation algorithm
         int numberOfMutations = (int)Math.ceil(coefficient*series.size());
         if(numberOfMutations<1 || series==null || series.size()<2) return; //makes no sense to go further
-        Random generator = new Random();
         int firstID = generator.nextInt(series.size());
         int lastID = firstID;
         int lastValue = series.get(lastID);
@@ -58,6 +57,7 @@ class Solution implements Comparable<Solution>{
             lastID=currentID;
         }
         series.set(firstID,lastValue);
+        this.fitness = computeFitness();
     }
 
     public static List<Solution> produce(int numberOfSolutions, Region region){
@@ -77,10 +77,7 @@ class Solution implements Comparable<Solution>{
     }
 
     public Integer getFitness() {
-        if(fitness!=null)
-            return fitness;
-        else
-            return fitness = computeFitness();
+        return fitness != null ? fitness : (fitness = computeFitness());
     }
 
     public static class Comparators {

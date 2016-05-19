@@ -2,11 +2,13 @@ package com.labspec.mieczkowskasagan;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 class Algorithm {
     //variables
     private final Region region;
     private List<Solution> solutionList; //population
+    private static final Random generator = new Random();
 
     private int currentNumberOfGeneration = 0;
     private int currentMinimalFitness = Integer.MAX_VALUE;
@@ -30,6 +32,7 @@ class Algorithm {
     }
 
     public void naturalSelection() {
+        //DAMIAN
     }
 
     public void crossover() {
@@ -37,19 +40,30 @@ class Algorithm {
     }
 
     public void mutate() {
+        for(Solution solution : solutionList){
+            if(probabilityTest(coefficientOfMutantsEachGeneration))
+                solution.mutate(coefficientOfMutatedGenesInChromosomes);
+        }
     }
 
     public void analyzePopulation() {
+        Collections.sort(solutionList);
+        currentMinimalFitness=solutionList.get(0).getFitness();
+
     }
 
     public boolean isFinished(){
         currentNumberOfGeneration++;
+        System.out.println(this);
         if(currentNumberOfGeneration >=generationsRequired ||
                 currentMinimalFitness <=maximalAcceptableFitness){
-            System.out.println(this);
             return true;
         }
         return false;
+    }
+
+    public boolean probabilityTest(double probability){
+        return generator.nextDouble() <= probability ? true : false;
     }
 
     public void testPrint(){
