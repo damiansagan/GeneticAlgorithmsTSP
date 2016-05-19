@@ -66,7 +66,7 @@ class Algorithm {
     }
 
     public boolean probabilityTest(double probability){
-        return generator.nextDouble() <= probability ? true : false;
+        return generator.nextDouble() <= probability;
     }
 
     public void testPrint(){
