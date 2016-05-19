@@ -3,22 +3,8 @@ package com.labspec.mieczkowskasagan;
 
 import java.util.*;
 
-public class Solution implements Comparable<Solution>{
-
-    public static class Comparators {
-
-        public static Comparator<Solution> FITNESS = new Comparator<Solution>() {
-            @Override
-            public int compare(Solution solution1, Solution solution2) {
-                return solution1.fitness.compareTo(solution2.fitness);
-            }
-        };
-    }
-
-    @Override
-    public int compareTo(Solution solution) {
-        return Comparators.FITNESS.compare(this, solution);
-    }
+class Solution implements Comparable<Solution>{
+    private static final Random generator = new Random();
 
     private Integer fitness;
     private List<Integer> series;
@@ -26,9 +12,8 @@ public class Solution implements Comparable<Solution>{
 
     public Solution(Region region) {
         this.region = region;
-        this.series = new ArrayList<>(region.getListOfCities());
+        this.series = new ArrayList<>(region.listOfCities);
         Collections.shuffle(series);
-        this.fitness = computeFitness();
     }
 
 
@@ -111,7 +96,7 @@ public class Solution implements Comparable<Solution>{
     }
 
 
-    public int computeFitness(){
+    private Integer computeFitness(){
         //there will be fitness computing method
         if(series == null || series.isEmpty()) throw new IllegalStateException();
         final ListIterator<Integer> iterator = series.listIterator();
@@ -127,9 +112,25 @@ public class Solution implements Comparable<Solution>{
         return sum;
     }
 
-    public void mutate(int numberOfMutations){
+    public void mutate(double coefficient){
         //there will be implemented mutation algorithm
-        //DAMIAN
+        int numberOfMutations = (int)Math.ceil(coefficient*series.size());
+        if(numberOfMutations<1 || series==null || series.size()<2) return; //makes no sense to go further
+        int firstID = generator.nextInt(series.size());
+        int lastID = firstID;
+        int lastValue = series.get(lastID);
+        for(int i = 0; i<numberOfMutations; i++){
+            int currentID = generator.nextInt(series.size());
+            while(currentID==lastID){ //can't be itself
+                currentID = generator.nextInt(series.size());
+            }
+            int currentValue = series.get(currentID);
+            series.set(currentID,lastValue);
+            lastValue=currentValue;
+            lastID=currentID;
+        }
+        series.set(firstID,lastValue);
+        this.fitness = computeFitness();
     }
 
     public static List<Solution> produce(int numberOfSolutions, Region region){
@@ -148,7 +149,23 @@ public class Solution implements Comparable<Solution>{
                 '}';
     }
 
-    public int getFitness() {
-        return fitness;
+    public Integer getFitness() {
+        return fitness != null ? fitness : (fitness = computeFitness());
     }
+
+    public static class Comparators {
+
+        public static Comparator<Solution> FITNESS = new Comparator<Solution>() {
+            @Override
+            public int compare(Solution solution1, Solution solution2) {
+                return solution1.getFitness().compareTo(solution2.getFitness());
+            }
+        };
+    }
+
+    @Override
+    public int compareTo(Solution solution) {
+        return Comparators.FITNESS.compare(this, solution);
+    }
+
 }
