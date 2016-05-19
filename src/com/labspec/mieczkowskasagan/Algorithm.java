@@ -9,6 +9,7 @@ class Algorithm {
     private final Region region;
     private List<Solution> solutionList; //population
     private static final Random generator = new Random();
+    private boolean isSorted = false;
 
     private int currentNumberOfGeneration = 0;
     private int currentMinimalFitness = Integer.MAX_VALUE;
@@ -29,6 +30,7 @@ class Algorithm {
         region = new RegionMatrix(numberOfChromosomes);
         solutionList = Solution.produce(initialPopulation,region);
         Collections.sort(solutionList);
+        isSorted=true;
     }
 
     public void naturalSelection() {
@@ -44,17 +46,18 @@ class Algorithm {
             if(probabilityTest(coefficientOfMutantsEachGeneration))
                 solution.mutate(coefficientOfMutatedGenesInChromosomes);
         }
+        isSorted=false;
     }
 
     public void analyzePopulation() {
-        Collections.sort(solutionList);
+        if(!isSorted)
+            Collections.sort(solutionList);
         currentMinimalFitness=solutionList.get(0).getFitness();
 
     }
 
     public boolean isFinished(){
         currentNumberOfGeneration++;
-        System.out.println(this);
         if(currentNumberOfGeneration >=generationsRequired ||
                 currentMinimalFitness <=maximalAcceptableFitness){
             return true;

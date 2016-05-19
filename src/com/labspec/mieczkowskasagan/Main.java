@@ -11,11 +11,11 @@ public class Main {
     public static void main(String[] args) throws InvocationTargetException, InterruptedException {
         XYSeries chartSeriesGenetic = new XYSeries("genetic");
         Algorithm algorithm = new Algorithm(
-                10, //numberOfChromosomes
+                50, //numberOfChromosomes
                 5000, //initialPopulation
-                10, //generationsRequired
+                100, //generationsRequired
                 100, //maximalAcceptableFitness
-                0.05, //coefficientOfMutantsEachGeneration
+                1, //coefficientOfMutantsEachGeneration
                 0.50 //coefficientOfMutatedGenesInChromosomes
         );
         //algorithm.testPrint();
@@ -27,17 +27,17 @@ public class Main {
             algorithm.analyzePopulation();
             chartSeriesGenetic.add(algorithm.getGeneration(), algorithm.getMinimalFitness());
         }
-
-        //showGUI(chartSeriesGenetic);
+        
+        showGUI(chartSeriesGenetic);
     }
 
-    private static void showGUI(XYSeries chartSeriesGenetic) throws InvocationTargetException, InterruptedException {
+    private static void showGUI(XYSeries chartSeries) throws InvocationTargetException, InterruptedException {
         // provide GUI to be run on SWING thread
         SwingUtilities.invokeAndWait(new Runnable() {
             @Override
             public void run() {
                 // create GUI object
-                ChartManager chartManagerGenetic = new ChartManager(chartSeriesGenetic,"generation number","fitness");
+                ChartManager chartManagerGenetic = new ChartManager(chartSeries,"generation number","fitness");
                 startJFrame(chartManagerGenetic);
             }
         });

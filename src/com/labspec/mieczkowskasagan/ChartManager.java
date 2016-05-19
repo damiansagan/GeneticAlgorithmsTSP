@@ -2,8 +2,6 @@ package com.labspec.mieczkowskasagan;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
-import org.jfree.chart.axis.NumberAxis;
-import org.jfree.chart.axis.NumberTickUnit;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.data.xy.XYSeries;
@@ -37,8 +35,8 @@ class ChartManager {
         xyPlot.setRangeGridlinePaint(Color.BLACK);
         xyPlot.setDomainGridlinePaint(Color.BLACK);
 
-        NumberAxis domainAxis = (NumberAxis) xyPlot.getDomainAxis();
-        domainAxis.setTickUnit(new NumberTickUnit(1));
+//        NumberAxis domainAxis = (NumberAxis) xyPlot.getDomainAxis();
+//        domainAxis.setTickUnit(new NumberTickUnit(1));
     }
 
     void refresh() {
