@@ -5,14 +5,16 @@ import java.util.List;
 import java.util.Random;
 
 class Algorithm {
+    private static final Random generator = new Random();
+
     //variables
     private final Region region;
     private List<Solution> solutionList; //population
-    private static final Random generator = new Random();
     private boolean isSorted = false;
 
     private int currentNumberOfGeneration = 0;
     private int currentMinimalFitness = Integer.MAX_VALUE;
+    private Solution currentBestSolution = null;
 
     //parameters
     private final int generationsRequired;
@@ -34,7 +36,11 @@ class Algorithm {
     }
 
     public void naturalSelection() {
-        //DAMIAN
+        if(!isSorted) {
+            Collections.sort(solutionList);
+            isSorted=true;
+        }
+
     }
 
     public void crossover() {
@@ -50,19 +56,18 @@ class Algorithm {
     }
 
     public void analyzePopulation() {
+        //it does NOT need the population to be sorted
         if(!isSorted)
-            Collections.sort(solutionList);
-        currentMinimalFitness=solutionList.get(0).getFitness();
-
+            currentBestSolution=Collections.min(solutionList);
+        else
+            currentBestSolution=solutionList.get(0);
+        currentMinimalFitness=currentBestSolution.getFitness();
     }
 
     public boolean isFinished(){
         currentNumberOfGeneration++;
-        if(currentNumberOfGeneration >=generationsRequired ||
-                currentMinimalFitness <=maximalAcceptableFitness){
-            return true;
-        }
-        return false;
+        return currentNumberOfGeneration >= generationsRequired ||
+                currentMinimalFitness <= maximalAcceptableFitness;
     }
 
     public boolean probabilityTest(double probability){
