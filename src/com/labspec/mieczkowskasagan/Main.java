@@ -21,7 +21,10 @@ public class Main {
         algorithm.testPrint();
 
         while(!algorithm.isFinished()){
-
+            algorithm.naturalSelection();
+            algorithm.crossover();
+            algorithm.mutate();
+            algorithm.analyzePopulation();
             chartSeriesGenetic.add(algorithm.getGeneration(), algorithm.getMinimalFitness());
         }
 

@@ -11,7 +11,6 @@ class Algorithm {
     private int currentNumberOfGeneration = 0;
     private int currentMinimalFitness = Integer.MAX_VALUE;
 
-
     //parameters
     private final int generationsRequired;
     private final int maximalAcceptableFitness;
@@ -19,18 +18,34 @@ class Algorithm {
     private final double coefficientOfMutatedGenesInChromosomes;
 
 
-    Algorithm(int numberOfChromosomes, int initialPopulation, int generationsRequired, int maximalAcceptableFitness, double coefficientOfMutantsEachGeneration, double coefficientOfMutatedGenesInChromosomes) {
+    Algorithm(int numberOfChromosomes, int initialPopulation, int generationsRequired, int maximalAcceptableFitness,
+              double coefficientOfMutantsEachGeneration, double coefficientOfMutatedGenesInChromosomes) {
         this.generationsRequired = generationsRequired;
         this.maximalAcceptableFitness = maximalAcceptableFitness;
         this.coefficientOfMutantsEachGeneration = coefficientOfMutantsEachGeneration;
         this.coefficientOfMutatedGenesInChromosomes = coefficientOfMutatedGenesInChromosomes;
         region = new RegionMatrix(numberOfChromosomes);
         solutionList = Solution.produce(initialPopulation,region);
+        Collections.sort(solutionList);
+    }
+
+    public void naturalSelection() {
+    }
+
+    public void crossover() {
+        //DOROTA
+    }
+
+    public void mutate() {
+    }
+
+    public void analyzePopulation() {
     }
 
     public boolean isFinished(){
         currentNumberOfGeneration++;
-        if(currentNumberOfGeneration >=generationsRequired || currentMinimalFitness <=maximalAcceptableFitness){
+        if(currentNumberOfGeneration >=generationsRequired ||
+                currentMinimalFitness <=maximalAcceptableFitness){
             System.out.println(this);
             return true;
         }
@@ -38,15 +53,8 @@ class Algorithm {
     }
 
     public void testPrint(){
-//        Solution s = new Solution(region);
-//        System.out.println(s);
-//        s.mutate(20);
-//        System.out.println(s);
-
         System.out.println(region);
-        Collections.sort(solutionList);
         System.out.println(solutionList.toString().replaceAll("},", "}," + System.getProperty("line.separator")));
-        System.out.println(Solution.makeOffspringFrom(solutionList.get(0),solutionList.get(1)));
     }
 
     public int getNumberOfSolutions(){

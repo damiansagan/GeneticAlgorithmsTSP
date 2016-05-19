@@ -88,7 +88,7 @@ class Solution implements Comparable<Solution>{
         public static Comparator<Solution> FITNESS = new Comparator<Solution>() {
             @Override
             public int compare(Solution solution1, Solution solution2) {
-                return solution1.getFitness().compareTo(solution1.getFitness());
+                return solution1.getFitness().compareTo(solution2.getFitness());
             }
         };
     }
