@@ -15,19 +15,17 @@ class Algorithm {
     //parameters
     private final int generationsRequired;
     private final int maximalAcceptableFitness;
-    private final int percentageOfMutantsEachGeneration;
-    private final int percentageOfMutatedGenesInChromosomes;
+    private final double coefficientOfMutantsEachGeneration;
+    private final double coefficientOfMutatedGenesInChromosomes;
 
 
-
-
-    Algorithm(int generationsRequired, int maximalAcceptableFitness, int percentageOfMutantsEachGeneration, int percentageOfMutatedGenesInChromosomes) {
+    Algorithm(int numberOfChromosomes, int initialPopulation, int generationsRequired, int maximalAcceptableFitness, double coefficientOfMutantsEachGeneration, double coefficientOfMutatedGenesInChromosomes) {
         this.generationsRequired = generationsRequired;
         this.maximalAcceptableFitness = maximalAcceptableFitness;
-        this.percentageOfMutantsEachGeneration = percentageOfMutantsEachGeneration;
-        this.percentageOfMutatedGenesInChromosomes = percentageOfMutatedGenesInChromosomes;
-        region = new RegionMatrix(20);
-        solutionList = Solution.produce(10,region);
+        this.coefficientOfMutantsEachGeneration = coefficientOfMutantsEachGeneration;
+        this.coefficientOfMutatedGenesInChromosomes = coefficientOfMutatedGenesInChromosomes;
+        region = new RegionMatrix(numberOfChromosomes);
+        solutionList = Solution.produce(initialPopulation,region);
     }
 
     public boolean isFinished(){

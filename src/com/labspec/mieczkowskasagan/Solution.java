@@ -39,9 +39,9 @@ class Solution implements Comparable<Solution>{
         return sum;
     }
 
-    public void mutate(int percentage){
+    public void mutate(int coefficient){
         //there will be implemented mutation algorithm
-        int numberOfMutations = (int)Math.ceil(0.01*percentage*series.size());
+        int numberOfMutations = (int)Math.ceil(coefficient*series.size());
         if(numberOfMutations<1 || series==null || series.size()<2) return; //makes no sense to go further
         Random generator = new Random();
         int firstID = generator.nextInt(series.size());
@@ -76,8 +76,11 @@ class Solution implements Comparable<Solution>{
                 '}';
     }
 
-    public int getFitness() {
-        return fitness;
+    public Integer getFitness() {
+        if(fitness!=null)
+            return fitness;
+        else
+            return fitness = computeFitness();
     }
 
     public static class Comparators {
@@ -85,7 +88,7 @@ class Solution implements Comparable<Solution>{
         public static Comparator<Solution> FITNESS = new Comparator<Solution>() {
             @Override
             public int compare(Solution solution1, Solution solution2) {
-                return solution1.fitness.compareTo(solution2.fitness);
+                return solution1.getFitness().compareTo(solution1.getFitness());
             }
         };
     }

@@ -10,8 +10,14 @@ public class Main {
 
     public static void main(String[] args) throws InvocationTargetException, InterruptedException {
         XYSeries chartSeriesGenetic = new XYSeries("genetic");
-        Algorithm algorithm = new Algorithm(10, 5000, 20, 20);
-
+        Algorithm algorithm = new Algorithm(
+                10, //numberOfChromosomes
+                5, //initialPopulation
+                10, //generationsRequired
+                5000, //maximalAcceptableFitness
+                0.05, //coefficientOfMutantsEachGeneration
+                0.10 //coefficientOfMutatedGenesInChromosomes
+        );
         algorithm.testPrint();
 
         while(!algorithm.isFinished()){
@@ -19,6 +25,10 @@ public class Main {
             chartSeriesGenetic.add(algorithm.getGeneration(), algorithm.getMinimalFitness());
         }
 
+        //showGUI(chartSeriesGenetic);
+    }
+
+    private static void showGUI(XYSeries chartSeriesGenetic) throws InvocationTargetException, InterruptedException {
         // provide GUI to be run on SWING thread
         SwingUtilities.invokeAndWait(new Runnable() {
             @Override
