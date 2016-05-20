@@ -46,10 +46,9 @@ class Algorithm {
     }
 
     void mutate() {
-        for(Solution solution : solutionList){
+        for(Solution solution : solutionList)
             if(probabilityTest(coefficientOfMutantsEachGeneration))
                 solution.mutate(coefficientOfMutatedGenesInChromosomes);
-        }
         isSorted=false;
     }
 
