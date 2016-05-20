@@ -13,10 +13,10 @@ public class Main {
         Algorithm algorithm = new Algorithm(
                 50, //numberOfChromosomes
                 5000, //initialPopulation
-                100, //generationsRequired
-                100, //maximalAcceptableFitness
-                1, //coefficientOfMutantsEachGeneration
-                0.50 //coefficientOfMutatedGenesInChromosomes
+                1000, //generationsRequired
+                -100, //maximalAcceptableFitness
+                0.1, //coefficientOfMutantsEachGeneration
+                0.1 //coefficientOfMutatedGenesInChromosomes
         );
         //algorithm.testPrint();
 
@@ -27,7 +27,9 @@ public class Main {
             algorithm.analyzePopulation();
             chartSeriesGenetic.add(algorithm.getGeneration(), algorithm.getMinimalFitness());
         }
-        
+
+
+
         showGUI(chartSeriesGenetic);
     }
 

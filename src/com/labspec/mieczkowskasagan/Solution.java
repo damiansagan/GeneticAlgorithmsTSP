@@ -10,7 +10,7 @@ class Solution implements Comparable<Solution>{
     private List<Integer> series;
     private Region region;
 
-    public Solution(Region region) {
+    Solution(Region region) {
         this.region = region;
         this.series = new ArrayList<>(region.listOfCities);
         Collections.shuffle(series);
@@ -112,16 +112,16 @@ class Solution implements Comparable<Solution>{
         return sum;
     }
 
-    public void mutate(double coefficient){
+    void mutate(double coefficient){
         //there will be implemented mutation algorithm
-        int numberOfMutations = (int)Math.ceil(coefficient*series.size());
+        int numberOfMutations = (int)Math.ceil(coefficient*series.size())%series.size();
         if(numberOfMutations<1 || series==null || series.size()<2) return; //makes no sense to go further
         int firstID = generator.nextInt(series.size());
         int lastID = firstID;
         int lastValue = series.get(lastID);
+        int currentID = generator.nextInt(series.size());
         for(int i = 0; i<numberOfMutations; i++){
-            int currentID = generator.nextInt(series.size());
-            while(currentID==lastID){ //can't be itself
+            while(currentID==lastID || currentID==firstID){ //can't be itself
                 currentID = generator.nextInt(series.size());
             }
             int currentValue = series.get(currentID);
@@ -133,12 +133,20 @@ class Solution implements Comparable<Solution>{
         this.fitness = computeFitness();
     }
 
-    public static List<Solution> produce(int numberOfSolutions, Region region){
+    static List<Solution> produce(int numberOfSolutions, Region region){
         List<Solution> result = new ArrayList<>(numberOfSolutions);
         for(int i = 0; i<numberOfSolutions; i++){
             result.add(new Solution(region));
         }
         return result;
+    }
+
+    void testForDuplicates(){
+        Set<Integer> set = new HashSet<>(series);
+        if(set.size() < series.size()){
+            System.out.println(this);
+            throw new IllegalStateException();
+        }
     }
 
     @Override
@@ -149,13 +157,13 @@ class Solution implements Comparable<Solution>{
                 '}';
     }
 
-    public Integer getFitness() {
+    Integer getFitness() {
         return fitness != null ? fitness : (fitness = computeFitness());
     }
 
-    public static class Comparators {
+    private static class Comparators {
 
-        public static Comparator<Solution> FITNESS = new Comparator<Solution>() {
+        static Comparator<Solution> FITNESS = new Comparator<Solution>() {
             @Override
             public int compare(Solution solution1, Solution solution2) {
                 return solution1.getFitness().compareTo(solution2.getFitness());

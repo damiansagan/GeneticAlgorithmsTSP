@@ -35,7 +35,7 @@ class Algorithm {
         isSorted=true;
     }
 
-    public void naturalSelection() {
+    void naturalSelection() {
         if(!isSorted) {
             Collections.sort(solutionList);
             isSorted=true;
@@ -43,11 +43,11 @@ class Algorithm {
 
     }
 
-    public void crossover() {
+    void crossover() {
         //DOROTA
     }
 
-    public void mutate() {
+    void mutate() {
         for(Solution solution : solutionList){
             if(probabilityTest(coefficientOfMutantsEachGeneration))
                 solution.mutate(coefficientOfMutatedGenesInChromosomes);
@@ -55,7 +55,7 @@ class Algorithm {
         isSorted=false;
     }
 
-    public void analyzePopulation() {
+    void analyzePopulation() {
         //it does NOT need the population to be sorted
         if(!isSorted)
             currentBestSolution=Collections.min(solutionList);
@@ -64,29 +64,40 @@ class Algorithm {
         currentMinimalFitness=currentBestSolution.getFitness();
     }
 
-    public boolean isFinished(){
+    boolean isFinished(){
         currentNumberOfGeneration++;
         return currentNumberOfGeneration >= generationsRequired ||
                 currentMinimalFitness <= maximalAcceptableFitness;
     }
 
-    public boolean probabilityTest(double probability){
+    private boolean probabilityTest(double probability){
         return generator.nextDouble() <= probability;
     }
 
     public void testPrint(){
         System.out.println(region);
         System.out.println(solutionList.toString().replaceAll("},", "}," + System.getProperty("line.separator")));
-        System.out.println("Dzieci:");
-        System.out.println(Solution.makeOffspringFrom(solutionList.get(0),solutionList.get(1)));
-
     }
 
-    public int getNumberOfSolutions(){
+    private void crossoverTest(){
+        Solution s1 = new Solution(region);
+        Solution s2 = new Solution(region);
+        System.out.println(s1);
+        System.out.println(s2);
+        for(int i = 0;i<2000;i++){
+            List<Solution> l = Solution.makeOffspringFrom(s1,s2);
+            for(Solution s : l){
+                s.testForDuplicates();
+            }
+        }
+    }
+
+    int getNumberOfSolutions(){
         return solutionList.size();
     }
-    public int getGeneration() { return currentNumberOfGeneration;  }
-    public int getMinimalFitness() { return currentMinimalFitness; }
+    int getGeneration() { return currentNumberOfGeneration;  }
+    int getMinimalFitness() { return currentMinimalFitness; }
+    Solution getCurrentBestSolution() { return currentBestSolution; }
 
     @Override
     public String toString() {
