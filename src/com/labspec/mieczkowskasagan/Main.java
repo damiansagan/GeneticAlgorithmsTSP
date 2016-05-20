@@ -12,10 +12,10 @@ public class Main {
         XYSeries chartSeriesGenetic = new XYSeries("genetic");
         Algorithm algorithm = new Algorithm(
                 50, //numberOfChromosomes
-                5000, //initialPopulation
+                500, //initialPopulation
                 1000, //generationsRequired
-                -100, //maximalAcceptableFitness
-                0.1, //coefficientOfMutantsEachGeneration
+                0, //maximalAcceptableFitness
+                1, //coefficientOfMutantsEachGeneration
                 0.1 //coefficientOfMutatedGenesInChromosomes
         );
         //algorithm.testPrint();

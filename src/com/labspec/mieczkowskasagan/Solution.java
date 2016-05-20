@@ -103,8 +103,9 @@ class Solution implements Comparable<Solution>{
         int first = iterator.next();
         int prev = first;
         int sum = 0;
+        int current;
         while (iterator.hasNext()) {
-            int current = iterator.next();
+            current = iterator.next();
             sum+=region.getDistanceBetween(prev,current);
             prev=current;
         }

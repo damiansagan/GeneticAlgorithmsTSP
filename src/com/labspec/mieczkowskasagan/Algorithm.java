@@ -31,8 +31,6 @@ class Algorithm {
         this.coefficientOfMutatedGenesInChromosomes = coefficientOfMutatedGenesInChromosomes;
         region = new RegionMatrix(numberOfChromosomes);
         solutionList = Solution.produce(initialPopulation,region);
-        Collections.sort(solutionList);
-        isSorted=true;
     }
 
     void naturalSelection() {
