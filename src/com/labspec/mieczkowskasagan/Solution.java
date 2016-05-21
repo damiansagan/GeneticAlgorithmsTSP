@@ -25,9 +25,6 @@ class Solution implements Comparable<Solution>{
         offspring.add(new Solution(mom.region));
         offspring.add(new Solution(mom.region));
 
-        if(mom.series == null || mom.series.isEmpty()) throw new IllegalStateException();
-        if(dad.series == null || dad.series.isEmpty()) throw new IllegalStateException();
-
         final ListIterator<Integer> momIterator = mom.series.listIterator();
         final ListIterator<Integer> dadIterator = dad.series.listIterator();
 
@@ -36,63 +33,48 @@ class Solution implements Comparable<Solution>{
 
         Random generator = new Random();
 
-        int off1prev = off1Iterator.next();
-        int off2prev = off2Iterator.next();
+        int momCurrent;
+        int dadCurrent;
+        int off2Current;
+        int off1Current;
 
         while(momIterator.hasNext() || dadIterator.hasNext()) {
 
-            int momCurrent = momIterator.next();
-            int dadCurrent = dadIterator.next();
+            if (generator.nextBoolean() && dadIterator.hasNext()){
 
-            if (generator.nextBoolean()){
+                dadCurrent = dadIterator.next();
 
-                for (int i=0; i<off1prev; i++){
-                    if (offspring.get(0).series.get(i) == momCurrent) {
-                            int off2Current = off2Iterator.next();
-                            offspring.get(1).series.set(off2Current, momCurrent);
-                            off2prev = off2Current;
+                for (int i=0; i<off1Iterator.nextIndex(); i++){
+                    if (offspring.get(0).series.get(i) == dadCurrent) {
+                            off2Current = off2Iterator.next();
+                            offspring.get(1).series.set(off2Current, dadCurrent);
                     }
                     else {
-                        int off1Current = off1Iterator.next();
-                        offspring.get(0).series.set(off1Current,momCurrent);
-                        off1prev = off1Current;
+                        off1Current = off1Iterator.next();
+                        offspring.get(0).series.set(off1Current,dadCurrent);
                     }
                 }
 
             }
 
-            else {
+            else if (!generator.nextBoolean() && momIterator.hasNext()){
+                momCurrent = momIterator.next();
 
-                for (int i=0; i<off1prev; i++){
-                    if (offspring.get(0).series.get(i) == dadCurrent){
-                        offspring.get(1).series.set(off2prev, dadCurrent);
-                        off2prev = off2Iterator.next();
+                for (int i=0; i<off1Iterator.nextIndex(); i++){
+                    if (offspring.get(0).series.get(i) == momCurrent){
+                        off2Current = off2Iterator.next();
+                        offspring.get(1).series.set(off2Current, momCurrent);
                     }
                     else {
-                        offspring.get(0).series.set(off1prev,dadCurrent);
-                        off1prev = off1Iterator.next();
+                        off1Current = off1Iterator.next();
+                        offspring.get(0).series.set(off1Current,momCurrent);
                     }
                 }
 
             }
         }
-
-        if (offspring.get(0).fitness == null || offspring.get(1).fitness == null) throw new IllegalStateException();
 
         return offspring;
-
-        /*if(series == null || series.isEmpty()) throw new IllegalStateException();
-        final ListIterator<Integer> iterator = series.listIterator();
-        int first = iterator.next();
-        int prev = first;
-        int sum = 0;
-        while (iterator.hasNext()) {
-            int current = iterator.next();
-            sum+=region.getDistanceBetween(prev,current);
-            prev=current;
-        }
-        sum+=region.getDistanceBetween(prev,first);
-        return sum;*/
     }
 
 

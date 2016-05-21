@@ -9,7 +9,8 @@ class Algorithm {
 
     //variables
     private final Region region;
-    private List<Solution> solutionList; //population
+    private List<Solution> solutionList;//population
+    private List<Solution> childrenList;
     private boolean isSorted = false;
 
     private int currentNumberOfGeneration = 0;
@@ -62,7 +63,7 @@ class Algorithm {
     }
 
     void crossover() {
-        //DOROTA
+            //DOROTA
     }
 
     void mutate() {

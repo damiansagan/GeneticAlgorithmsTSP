@@ -18,7 +18,7 @@ public class Main {
                 1, //coefficientOfMutantsEachGeneration
                 0.1 //coefficientOfMutatedGenesInChromosomes
         );
-        //algorithm.testPrint();
+        algorithm.testPrint();
 
         while(!algorithm.isFinished()){
             algorithm.naturalSelection();
