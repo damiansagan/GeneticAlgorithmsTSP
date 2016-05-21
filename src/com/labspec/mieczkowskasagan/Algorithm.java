@@ -93,8 +93,9 @@ class Algorithm {
     }
 
     public void testPrint(){
-        System.out.println(region);
-        System.out.println(solutionList.toString().replaceAll("},", "}," + System.getProperty("line.separator")));
+        //System.out.println(region);
+        crossoverTest();
+        //System.out.println(solutionList.toString().replaceAll("},", "}," + System.getProperty("line.separator")));
     }
 
     private void crossoverTest(){
@@ -102,11 +103,12 @@ class Algorithm {
         Solution s2 = new Solution(region);
         System.out.println(s1);
         System.out.println(s2);
-        for(int i = 0;i<2000;i++){
+        for(int i = 0;i<2;i++){
             List<Solution> l = Solution.makeOffspringFrom(s1,s2);
             for(Solution s : l){
                 s.testForDuplicates();
             }
+            System.out.println(l);
         }
     }
 

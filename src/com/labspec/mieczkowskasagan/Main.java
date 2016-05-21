@@ -11,7 +11,7 @@ public class Main {
     public static void main(String[] args) throws InvocationTargetException, InterruptedException {
         XYSeries chartSeriesGenetic = new XYSeries("genetic");
         Algorithm algorithm = new Algorithm(
-                50, //numberOfChromosomes
+                5, //numberOfChromosomes
                 500, //initialPopulation
                 1000, //generationsRequired
                 0, //maximalAcceptableFitness
