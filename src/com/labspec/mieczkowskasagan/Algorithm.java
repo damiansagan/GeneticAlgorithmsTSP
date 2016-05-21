@@ -21,6 +21,7 @@ class Algorithm {
     private final int maximalAcceptableFitness;
     private final double coefficientOfMutantsEachGeneration;
     private final double coefficientOfMutatedGenesInChromosomes;
+    private final double coefficientOfLinearSelection = 1;
 
 
     Algorithm(int numberOfChromosomes, int initialPopulation, int generationsRequired, int maximalAcceptableFitness,
@@ -34,10 +35,29 @@ class Algorithm {
     }
 
     void naturalSelection() {
-        if(!isSorted) {
-            Collections.sort(solutionList);
-            isSorted=true;
-        }
+        if(solutionList==null || solutionList.isEmpty()) return;
+        boolean linearSelection = probabilityTest(coefficientOfLinearSelection);
+//        if(linearSelection) { //linear selection algorithm
+//            if(!isSorted) {
+//                Collections.sort(solutionList);
+//                isSorted=true;
+//            }
+//            double Sn=(1+solutionList.size())*0.5*solutionList.size();
+//            ListIterator<Solution> iterator = solutionList.listIterator();
+//            int index=0;
+//            while(iterator.hasNext()){
+//                Solution solution = iterator.next();
+//                if(probabilityTest(1-(double)index/Sn)){
+//                    System.out.println(solution);
+//                    iterator.remove();
+//                }
+//                index++;
+//            }
+//
+//        }
+//        else{ //roulette selection algorithm
+//            System.out.println("roulette");
+//        }
 
     }
 
