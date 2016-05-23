@@ -64,6 +64,10 @@ class Algorithm {
 
     void crossover() {
             //DOROTA
+        childrenList = Solution.makeOffspringFrom(solutionList.get(0), solutionList.get(1));
+
+        System.out.println("Dzieci:");
+        System.out.println(childrenList);
     }
 
     void mutate() {

@@ -16,63 +16,60 @@ class Solution implements Comparable<Solution>{
         Collections.shuffle(series);
     }
 
+    Solution(List<Integer> population, Region region){
+        this.series = population;
+        this.region = region;
+    }
+
+
 
     public static List<Solution> makeOffspringFrom(Solution mom, Solution dad){
         //DOROTA
 
+        int size = mom.region.getNumberOfCities();
         List<Solution> offspring = new ArrayList<>(2);
+        List<Integer> firstChild = new ArrayList<>();
+        List<Integer> secondChild = new ArrayList<>();
 
-        offspring.add(new Solution(mom.region));
-        offspring.add(new Solution(mom.region));
+        for (int i=0; i<size; i++){
+            firstChild.add(null);
+            secondChild.add(null);
+        }
 
         final ListIterator<Integer> momIterator = mom.series.listIterator();
         final ListIterator<Integer> dadIterator = dad.series.listIterator();
 
-        final ListIterator<Integer> off1Iterator = offspring.get(0).series.listIterator();
-        final ListIterator<Integer> off2Iterator = offspring.get(1).series.listIterator();
-
-        Random generator = new Random();
-
         int momCurrent;
         int dadCurrent;
-        int off2Current;
-        int off1Current;
+        int firstCurrent=0;
+        int secondCurrent=0;
 
         while(momIterator.hasNext() || dadIterator.hasNext()) {
-
-            if (generator.nextBoolean() && dadIterator.hasNext()){
-
+            if (mom.generator.nextBoolean() && dadIterator.hasNext()){
                 dadCurrent = dadIterator.next();
-
-                for (int i=0; i<off1Iterator.nextIndex(); i++){
-                    if (offspring.get(0).series.get(i) == dadCurrent) {
-                            off2Current = off2Iterator.next();
-                            offspring.get(1).series.set(off2Current, dadCurrent);
+                if (firstChild.contains(dadCurrent)){
+                    secondChild.set(secondCurrent,dadCurrent);
+                    secondCurrent++;
                     }
                     else {
-                        off1Current = off1Iterator.next();
-                        offspring.get(0).series.set(off1Current,dadCurrent);
+                    firstChild.set(firstCurrent,dadCurrent);
+                    firstCurrent++;
                     }
-                }
-
             }
-
-            else if (!generator.nextBoolean() && momIterator.hasNext()){
+            else if (!mom.generator.nextBoolean() && momIterator.hasNext()){
                 momCurrent = momIterator.next();
-
-                for (int i=0; i<off1Iterator.nextIndex(); i++){
-                    if (offspring.get(0).series.get(i) == momCurrent){
-                        off2Current = off2Iterator.next();
-                        offspring.get(1).series.set(off2Current, momCurrent);
-                    }
-                    else {
-                        off1Current = off1Iterator.next();
-                        offspring.get(0).series.set(off1Current,momCurrent);
-                    }
+                if (firstChild.contains(momCurrent)){
+                    secondChild.set(secondCurrent,momCurrent);
+                    secondCurrent++;
                 }
-
+                else {
+                    firstChild.set(firstCurrent,momCurrent);
+                    firstCurrent++;
+                }
             }
         }
+        offspring.add(new Solution(firstChild,mom.region));
+        offspring.add(new Solution(secondChild,mom.region));
 
         return offspring;
     }

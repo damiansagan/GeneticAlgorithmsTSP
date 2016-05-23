@@ -11,9 +11,9 @@ public class Main {
     public static void main(String[] args) throws InvocationTargetException, InterruptedException {
         XYSeries chartSeriesGenetic = new XYSeries("genetic");
         Algorithm algorithm = new Algorithm(
-                50, //numberOfChromosomes
-                500, //initialPopulation
-                1000, //generationsRequired
+                5, //numberOfChromosomes
+                10, //initialPopulation
+                5, //generationsRequired
                 0, //maximalAcceptableFitness
                 1, //coefficientOfMutantsEachGeneration
                 0.1 //coefficientOfMutatedGenesInChromosomes
@@ -22,8 +22,8 @@ public class Main {
 
         while(!algorithm.isFinished()){
             algorithm.naturalSelection();
-            algorithm.crossover();
             algorithm.mutate();
+            algorithm.crossover();
             algorithm.analyzePopulation();
             chartSeriesGenetic.add(algorithm.getGeneration(), algorithm.getMinimalFitness());
         }
