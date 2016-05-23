@@ -11,6 +11,7 @@ class Solution implements Comparable<Solution>{
     private Region region;
 
     Solution(Region region) {
+        if(region==null) return;
         this.region = region;
         this.series = new ArrayList<>(region.listOfCities);
         Collections.shuffle(series);

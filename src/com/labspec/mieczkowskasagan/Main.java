@@ -10,43 +10,45 @@ public class Main {
 
     public static void main(String[] args) throws InvocationTargetException, InterruptedException {
         XYSeries chartSeriesGenetic = new XYSeries("genetic");
+        XYSeries population = new XYSeries("population");
         Algorithm algorithm = new Algorithm(
-                5, //numberOfChromosomes
-                10, //initialPopulation
-                5, //generationsRequired
+                50, //numberOfChromosomes
+                10000, //initialPopulation
+                1000, //generationsRequired
                 0, //maximalAcceptableFitness
-                1, //coefficientOfMutantsEachGeneration
-                0.1 //coefficientOfMutatedGenesInChromosomes
+                0.05, //coefficientOfMutantsEachGeneration
+                0.05, //coefficientOfMutatedGenesInChromosomes
+                0 //coefficientOfLinearSelection
         );
         algorithm.testPrint();
 
         while(!algorithm.isFinished()){
             algorithm.naturalSelection();
-            algorithm.mutate();
             algorithm.crossover();
+            algorithm.mutate();
             algorithm.analyzePopulation();
             chartSeriesGenetic.add(algorithm.getGeneration(), algorithm.getMinimalFitness());
+            population.add(algorithm.getGeneration(),algorithm.getNumberOfSolutions());
         }
 
-
-
-        showGUI(chartSeriesGenetic);
+        showGUI(population, "Population in function of generation", "generation number", "population");
+        showGUI(chartSeriesGenetic, "Fitness in function of generation", "generation number", "fitness");
     }
 
-    private static void showGUI(XYSeries chartSeries) throws InvocationTargetException, InterruptedException {
+    private static void showGUI(XYSeries chartSeries, String title, String XAxis, String YAxis) throws InvocationTargetException, InterruptedException {
         // provide GUI to be run on SWING thread
         SwingUtilities.invokeAndWait(new Runnable() {
             @Override
             public void run() {
                 // create GUI object
-                ChartManager chartManagerGenetic = new ChartManager(chartSeries,"generation number","fitness");
-                startJFrame(chartManagerGenetic);
+                ChartManager chartManagerGenetic = new ChartManager(chartSeries,XAxis,YAxis);
+                startJFrame(chartManagerGenetic, title);
             }
         });
     }
 
-    private static void startJFrame(ChartManager chartManager){
-        JFrame f = new JFrame("Genetic Chart");
+    private static void startJFrame(ChartManager chartManager, String title){
+        JFrame f = new JFrame(title);
         f.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         f.setLayout(new GridLayout(1, 1));
         f.setSize(1200, 300);
