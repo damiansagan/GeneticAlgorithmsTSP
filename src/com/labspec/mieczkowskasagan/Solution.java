@@ -26,52 +26,30 @@ class Solution implements Comparable<Solution>{
 
     public static List<Solution> makeOffspringFrom(Solution mom, Solution dad){
         //DOROTA
-
-        int size = mom.region.getNumberOfCities();
+        int capacity = mom.region.getNumberOfCities();
         List<Solution> offspring = new ArrayList<>(2);
-        List<Integer> firstChild = new ArrayList<>();
-        List<Integer> secondChild = new ArrayList<>();
-
-        for (int i=0; i<size; i++){
-            firstChild.add(null);
-            secondChild.add(null);
-        }
-
+        List<Integer> firstChild = new ArrayList<>(capacity);
+        List<Integer> secondChild = new ArrayList<>(capacity);
         final ListIterator<Integer> momIterator = mom.series.listIterator();
         final ListIterator<Integer> dadIterator = dad.series.listIterator();
-
-        int momCurrent;
-        int dadCurrent;
-        int firstCurrent=0;
-        int secondCurrent=0;
-
-        while(momIterator.hasNext() || dadIterator.hasNext()) {
-            if (mom.generator.nextBoolean() && dadIterator.hasNext()){
-                dadCurrent = dadIterator.next();
-                if (firstChild.contains(dadCurrent)){
-                    secondChild.set(secondCurrent,dadCurrent);
-                    secondCurrent++;
-                    }
-                    else {
-                    firstChild.set(firstCurrent,dadCurrent);
-                    firstCurrent++;
-                    }
-            }
-            else if (!mom.generator.nextBoolean() && momIterator.hasNext()){
-                momCurrent = momIterator.next();
-                if (firstChild.contains(momCurrent)){
-                    secondChild.set(secondCurrent,momCurrent);
-                    secondCurrent++;
-                }
-                else {
-                    firstChild.set(firstCurrent,momCurrent);
-                    firstCurrent++;
-                }
-            }
+        Integer value;
+        while (momIterator.hasNext() && dadIterator.hasNext()){
+            value = generator.nextBoolean() ? momIterator.next() : dadIterator.next();
+            if (!firstChild.contains(value))
+                firstChild.add(value);
+            else
+                secondChild.add(value);
+        }
+        final ListIterator<Integer> rest = momIterator.hasNext() ? momIterator : dadIterator;
+        while (rest.hasNext()){
+            value = rest.next();
+            if (!firstChild.contains(value))
+                firstChild.add(value);
+            else
+                secondChild.add(value);
         }
         offspring.add(new Solution(firstChild,mom.region));
         offspring.add(new Solution(secondChild,mom.region));
-
         return offspring;
     }
 

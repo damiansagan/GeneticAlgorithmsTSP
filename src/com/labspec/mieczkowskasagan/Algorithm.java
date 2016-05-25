@@ -1,9 +1,6 @@
 package com.labspec.mieczkowskasagan;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.Random;
+import java.util.*;
 
 class Algorithm {
     private static final Random generator = new Random();
@@ -77,11 +74,14 @@ class Algorithm {
     }
 
     void crossover() {
-            //DOROTA
-        childrenList = Solution.makeOffspringFrom(solutionList.get(0), solutionList.get(1));
+        List<Solution> temp = new ArrayList<>();
+        for(Solution first : solutionList){
 
-        System.out.println("Dzieci:");
-        System.out.println(childrenList);
+                Solution second = solutionList.get(generator.nextInt(solutionList.size()));
+                temp.addAll(Solution.makeOffspringFrom(first, second));
+
+        }
+        solutionList = temp;
     }
 
     void mutate() {
@@ -113,7 +113,7 @@ class Algorithm {
 
     public void testPrint(){
         //System.out.println(region);
-        //crossoverTest();
+        crossoverTest();
         //System.out.println(solutionList.toString().replaceAll("},", "}," + System.getProperty("line.separator")));
     }
 

@@ -20,15 +20,16 @@ public class Main {
                 0.05, //coefficientOfMutatedGenesInChromosomes
                 0 //coefficientOfLinearSelection
         );
-        algorithm.testPrint();
+        //algorithm.testPrint();
 
         while(!algorithm.isFinished()){
             algorithm.naturalSelection();
-            algorithm.crossover();
+            //algorithm.crossover();
             algorithm.mutate();
             algorithm.analyzePopulation();
             chartSeriesGenetic.add(algorithm.getGeneration(), algorithm.getMinimalFitness());
             population.add(algorithm.getGeneration(),algorithm.getNumberOfSolutions());
+            System.out.println(algorithm.getGeneration());
         }
 
         showGUI(population, "Population in function of generation", "generation number", "population");
