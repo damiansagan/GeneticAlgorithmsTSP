@@ -44,23 +44,20 @@ class Algorithm {
     }
 
     void linearSelection() {
-            if(!isSorted) {
-                Collections.sort(solutionList);
-                isSorted=true;
-            }
-            double Sn=(1+solutionList.size())*0.5*solutionList.size();
-            ListIterator<Solution> iterator = solutionList.listIterator();
-            int index=1;
-            //StringBuilder stringBuilder = new StringBuilder();
-            //System.out.println(solutionList.toString().replaceAll("},", "}," + System.getProperty("line.separator")));
-            while(iterator.hasNext()){
-                iterator.next();
-                //stringBuilder.append((double)index/Sn).append(" ");
-                if(probabilityTest((double)index/Sn))
-                    iterator.remove();
-                index++;
-            }
-            //System.out.println(stringBuilder.toString());
+        Collections.sort(solutionList);
+        double Sn=(1+solutionList.size())*0.5*solutionList.size();
+        ListIterator<Solution> iterator = solutionList.listIterator();
+        int index=1;
+        //StringBuilder stringBuilder = new StringBuilder();
+        //System.out.println(solutionList.toString().replaceAll("},", "}," + System.getProperty("line.separator")));
+        while(iterator.hasNext()){
+            iterator.next();
+            //stringBuilder.append((double)index/Sn).append(" ");
+            if(probabilityTest((double)index/Sn))
+                iterator.remove();
+            index++;
+        }
+        //System.out.println(stringBuilder.toString());
     }
 
     void rouletteSelection() {
@@ -73,15 +70,15 @@ class Algorithm {
             if(val<min) min = val;
         }
         ListIterator<Solution> iterator = solutionList.listIterator();
-        //StringBuilder stringBuilder = new StringBuilder();
+        StringBuilder stringBuilder = new StringBuilder();
         //System.out.println(solutionList.toString().replaceAll("},", "}," + System.getProperty("line.separator")));
         while(iterator.hasNext()){
             Solution solution = iterator.next();
-            //stringBuilder.append((double)(solution.getFitness())/sum*solutionList.size()).append(" ");
+            stringBuilder.append((double)(solution.getFitness())/sum*solutionList.size()).append(" ");
             if(!probabilityTest((double)(solution.getFitness())/sum*solutionList.size()))
                 iterator.remove();
         }
-        //System.out.println(stringBuilder.toString());
+        System.out.println(stringBuilder.toString());
     }
 
     void crossover() {
@@ -99,16 +96,12 @@ class Algorithm {
         for(Solution solution : solutionList)
             if(probabilityTest(coefficientOfMutantsEachGeneration))
                 solution.mutate(coefficientOfMutatedGenesInChromosomes);
-        isSorted=false;
     }
 
     void analyzePopulation() {
         //it does NOT need the population to be sorted
         if(solutionList==null || solutionList.isEmpty()) return;
-        if(!isSorted)
-            currentBestSolution=Collections.min(solutionList);
-        else
-            currentBestSolution=solutionList.get(0);
+        currentBestSolution=Collections.min(solutionList);
         currentMinimalFitness=currentBestSolution.getFitness();
     }
 
