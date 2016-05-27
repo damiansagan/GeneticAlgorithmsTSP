@@ -23,7 +23,7 @@ public class Main {
         //algorithm.testPrint();
 
         while(!algorithm.isFinished()){
-            algorithm.naturalSelection();
+            algorithm.rouletteSelection();
             //algorithm.crossover();
             algorithm.mutate();
             algorithm.analyzePopulation();

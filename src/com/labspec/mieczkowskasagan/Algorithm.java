@@ -34,10 +34,16 @@ class Algorithm {
         solutionList = Solution.produce(initialPopulation,region);
     }
 
-    void naturalSelection() {
-        if(solutionList==null || solutionList.size()<2) return;
+    void randomSelection() {
+        if (solutionList == null || solutionList.size() < 2) return;
         boolean linearSelection = probabilityTest(coefficientOfLinearSelection);
-        if(linearSelection) { //linear selection algorithm
+        if (linearSelection)
+            linearSelection(); //linear selection algorithm
+        else
+            rouletteSelection(); //roulette selection algorithm
+    }
+
+    void linearSelection() {
             if(!isSorted) {
                 Collections.sort(solutionList);
                 isSorted=true;
@@ -55,22 +61,27 @@ class Algorithm {
                 index++;
             }
             //System.out.println(stringBuilder.toString());
+    }
+
+    void rouletteSelection() {
+        int sum = 0;
+        int min = Integer.MAX_VALUE;
+        int val;
+        for(Solution solution : solutionList) {
+            val = solution.getFitness();
+            sum += val;
+            if(val<min) min = val;
         }
-        else{ //roulette selection algorithm
-            int sum = 0;
-            for(Solution solution : solutionList)
-                sum += solution.getFitness();
-            ListIterator<Solution> iterator = solutionList.listIterator();
-            //StringBuilder stringBuilder = new StringBuilder();
-            //System.out.println(solutionList.toString().replaceAll("},", "}," + System.getProperty("line.separator")));
-            while(iterator.hasNext()){
-                Solution solution = iterator.next();
-                //stringBuilder.append((double)(solution.getFitness())/sum*solutionList.size()).append(" ");
-                if(!probabilityTest((double)(solution.getFitness())/sum*solutionList.size()))
-                    iterator.remove();
-            }
-            //System.out.println(stringBuilder.toString());
+        ListIterator<Solution> iterator = solutionList.listIterator();
+        //StringBuilder stringBuilder = new StringBuilder();
+        //System.out.println(solutionList.toString().replaceAll("},", "}," + System.getProperty("line.separator")));
+        while(iterator.hasNext()){
+            Solution solution = iterator.next();
+            //stringBuilder.append((double)(solution.getFitness())/sum*solutionList.size()).append(" ");
+            if(!probabilityTest((double)(solution.getFitness())/sum*solutionList.size()))
+                iterator.remove();
         }
+        //System.out.println(stringBuilder.toString());
     }
 
     void crossover() {
