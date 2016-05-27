@@ -17,15 +17,14 @@ class Solution implements Comparable<Solution>{
         Collections.shuffle(series);
     }
 
-    Solution(List<Integer> population, Region region){
+    private Solution(List<Integer> population, Region region){
         this.series = population;
         this.region = region;
     }
 
 
 
-    public static List<Solution> makeOffspringFrom(Solution mom, Solution dad){
-        //DOROTA
+    static List<Solution> makeOffspringFrom(Solution mom, Solution dad){
         int capacity = mom.region.getNumberOfCities();
         List<Solution> offspring = new ArrayList<>(2);
         List<Integer> firstChild = new ArrayList<>(capacity);

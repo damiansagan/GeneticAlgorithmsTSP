@@ -4,13 +4,13 @@ import java.util.Arrays;
 import java.util.Random;
 
 
-class RegionMatrix extends Region {
+class RandomDistancesRegion extends Region {
 
     private int[][] distancesBetweenCities;
 
-    RegionMatrix(int numberOfCities) {
+    RandomDistancesRegion(int numberOfCities) {
         super(numberOfCities);
-
+        int maxDistanceBetween = 100;
         Random generator = new Random();
         this.distancesBetweenCities = new int[numberOfCities][numberOfCities];
         for(int i = 0; i<numberOfCities; i++){
@@ -23,6 +23,22 @@ class RegionMatrix extends Region {
         }
     }
 
+    @Override
+    public Integer getNearestCityFrom(int city) {
+        Integer nearest = null;
+        int min = Integer.MAX_VALUE;
+        int val;
+        for(int i = 0; i<getNumberOfCities();i++) {
+            val = distancesBetweenCities[city][i];
+            if(val<min && val > 0){
+                min = val;
+                nearest=i;
+            }
+        }
+        return nearest;
+    }
+
+    @Override
     public int getDistanceBetween(int cityA, int cityB){
         return distancesBetweenCities[cityA][cityB];
     }

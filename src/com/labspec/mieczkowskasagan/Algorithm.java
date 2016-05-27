@@ -30,7 +30,7 @@ class Algorithm {
         this.coefficientOfMutantsEachGeneration = coefficientOfMutantsEachGeneration;
         this.coefficientOfMutatedGenesInChromosomes = coefficientOfMutatedGenesInChromosomes;
         this.coefficientOfLinearSelection=coefficientOfLinearSelection;
-        region = new RegionMatrix(numberOfChromosomes);
+        region = new RandomDistancesRegion(numberOfChromosomes);
         solutionList = Solution.produce(initialPopulation,region);
     }
 
@@ -103,6 +103,7 @@ class Algorithm {
 
     boolean isFinished(){
         currentNumberOfGeneration++;
+        System.out.println("Generation number: " + currentNumberOfGeneration);
         return currentNumberOfGeneration >= generationsRequired ||
                 currentMinimalFitness <= maximalAcceptableFitness || solutionList.size()<2;
     }
@@ -112,9 +113,12 @@ class Algorithm {
     }
 
     public void testPrint(){
-        //System.out.println(region);
-        crossoverTest();
-        //System.out.println(solutionList.toString().replaceAll("},", "}," + System.getProperty("line.separator")));
+//        for(Integer i : region.getListOfCities())
+//            System.out.println("From: " + i +" to: "+ region.getNearestCityFrom(i) +
+//                    " minimum is: " + region.getDistanceBetween(i,region.getNearestCityFrom(i)));
+//        System.out.println(region);
+//        crossoverTest();
+//        System.out.println(solutionList.toString().replaceAll("},", "}," + System.getProperty("line.separator")));
     }
 
     private void crossoverTest(){

@@ -8,7 +8,6 @@ import java.util.stream.IntStream;
 abstract class Region {
 
     final List<Integer> listOfCities;
-    final int maxDistanceBetween = 100;
 
     Region(int numberOfCities) {
         listOfCities = new ArrayList<>(numberOfCities);
@@ -16,11 +15,9 @@ abstract class Region {
     }
 
     public abstract int getDistanceBetween(int cityA, int cityB);
+    public abstract Integer getNearestCityFrom(int city);
 
-    Integer getNumberOfCities(){
-        return listOfCities.size();
-    }
-
+    Integer getNumberOfCities(){ return listOfCities.size(); }
     public List<Integer> getListOfCities() {
         return listOfCities;
     }

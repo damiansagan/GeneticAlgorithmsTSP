@@ -29,7 +29,6 @@ public class Main {
             algorithm.analyzePopulation();
             chartSeriesGenetic.add(algorithm.getGeneration(), algorithm.getMinimalFitness());
             population.add(algorithm.getGeneration(),algorithm.getNumberOfSolutions());
-            System.out.println(algorithm.getGeneration());
         }
 
         showGUI(population, "Population in function of generation", "generation number", "population");
