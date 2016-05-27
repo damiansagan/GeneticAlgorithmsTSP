@@ -20,65 +20,33 @@ class Algorithm {
     private final int maximalAcceptableFitness;
     private final double coefficientOfMutantsEachGeneration;
     private final double coefficientOfMutatedGenesInChromosomes;
-    private final double coefficientOfLinearSelection;
 
 
     Algorithm(int numberOfChromosomes, int initialPopulation, int generationsRequired, int maximalAcceptableFitness,
-              double coefficientOfMutantsEachGeneration, double coefficientOfMutatedGenesInChromosomes, double coefficientOfLinearSelection) {
+              double coefficientOfMutantsEachGeneration, double coefficientOfMutatedGenesInChromosomes) {
         this.generationsRequired = generationsRequired;
         this.maximalAcceptableFitness = maximalAcceptableFitness;
         this.coefficientOfMutantsEachGeneration = coefficientOfMutantsEachGeneration;
         this.coefficientOfMutatedGenesInChromosomes = coefficientOfMutatedGenesInChromosomes;
-        this.coefficientOfLinearSelection=coefficientOfLinearSelection;
         region = new RandomDistancesRegion(numberOfChromosomes);
         solutionList = Solution.produce(initialPopulation,region);
     }
 
-    void randomSelection() {
-        if (solutionList == null || solutionList.size() < 2) return;
-        boolean linearSelection = probabilityTest(coefficientOfLinearSelection);
-        if (linearSelection)
-            linearSelection(); //linear selection algorithm
-        else
-            rouletteSelection(); //roulette selection algorithm
-    }
-
     void linearSelection() {
-        Collections.sort(solutionList);
-        double Sn=(1+solutionList.size())*0.5*solutionList.size();
-        ListIterator<Solution> iterator = solutionList.listIterator();
-        int index=1;
-        //StringBuilder stringBuilder = new StringBuilder();
-        //System.out.println(solutionList.toString().replaceAll("},", "}," + System.getProperty("line.separator")));
-        while(iterator.hasNext()){
-            iterator.next();
-            //stringBuilder.append((double)index/Sn).append(" ");
-            if(probabilityTest((double)index/Sn))
-                iterator.remove();
-            index++;
+        int size = solutionList.size();
+        List<Solution> newPopulation = new ArrayList<>(size);
+        Collections.sort(solutionList,Collections.reverseOrder());
+        while(newPopulation.size()<solutionList.size()) {
+            ListIterator<Solution> iterator = solutionList.listIterator();
+            int index = 1;
+            while (iterator.hasNext() && newPopulation.size() < solutionList.size()) {
+                Solution solution = iterator.next();
+                if (probabilityTest((double) index / size))
+                    newPopulation.add(solution);
+                index++;
+            }
         }
-        //System.out.println(stringBuilder.toString());
-    }
-
-    void rouletteSelection() {
-        int sum = 0;
-        int min = Integer.MAX_VALUE;
-        int val;
-        for(Solution solution : solutionList) {
-            val = solution.getFitness();
-            sum += val;
-            if(val<min) min = val;
-        }
-        ListIterator<Solution> iterator = solutionList.listIterator();
-        StringBuilder stringBuilder = new StringBuilder();
-        //System.out.println(solutionList.toString().replaceAll("},", "}," + System.getProperty("line.separator")));
-        while(iterator.hasNext()){
-            Solution solution = iterator.next();
-            stringBuilder.append((double)(solution.getFitness())/sum*solutionList.size()).append(" ");
-            if(!probabilityTest((double)(solution.getFitness())/sum*solutionList.size()))
-                iterator.remove();
-        }
-        System.out.println(stringBuilder.toString());
+        solutionList=newPopulation;
     }
 
     void crossover() {
@@ -99,7 +67,6 @@ class Algorithm {
     }
 
     void analyzePopulation() {
-        //it does NOT need the population to be sorted
         if(solutionList==null || solutionList.isEmpty()) return;
         currentBestSolution=Collections.min(solutionList);
         currentMinimalFitness=currentBestSolution.getFitness();
@@ -144,6 +111,7 @@ class Algorithm {
     int getGeneration() { return currentNumberOfGeneration;  }
     int getMinimalFitness() { return currentMinimalFitness; }
     Solution getCurrentBestSolution() { return currentBestSolution; }
+    void printPopulation(){ System.out.println(solutionList.toString().replaceAll("},", "}," + System.getProperty("line.separator"))); }
 
     @Override
     public String toString() {
