@@ -22,8 +22,6 @@ class Solution implements Comparable<Solution>{
         this.region = region;
     }
 
-
-
     static List<Solution> makeOffspringFrom(Solution mom, Solution dad){
         int capacity = mom.region.getNumberOfCities();
         List<Solution> offspring = new ArrayList<>(2);
@@ -52,7 +50,6 @@ class Solution implements Comparable<Solution>{
         return offspring;
     }
 
-
     private Integer computeFitness(){
         //there will be fitness computing method
         if(series == null || series.isEmpty()) throw new IllegalStateException();
@@ -68,6 +65,13 @@ class Solution implements Comparable<Solution>{
         }
         sum+=region.getDistanceBetween(prev,first);
         return sum;
+    }
+
+    void mutateTEST(double coefficient){
+        if(series==null || series.size()<2) return;
+        while(generator.nextDouble() <= coefficient){
+            Collections.swap(series,generator.nextInt(series.size()),generator.nextInt(series.size()));
+        }
     }
 
     void mutate(double coefficient){

@@ -13,15 +13,16 @@ public class Main {
         XYSeries population = new XYSeries("population");
         Algorithm algorithm = new Algorithm(
                 50, //numberOfChromosomes
-                1000, //initialPopulation
+                10000, //initialPopulation
                 1000, //generationsRequired
                 0, //maximalAcceptableFitness
-                0.005, //coefficientOfMutantsEachGeneration
-                0.05 //coefficientOfMutatedGenesInChromosomes
+                0.00001, //coefficientOfMutantsEachGeneration
+                0.00001 //coefficientOfMutatedGenesInChromosomes
         );
         //algorithm.testPrint();
 
         while(!algorithm.isFinished()){
+            //algorithm.printPopulation();
             algorithm.linearSelection();
             //algorithm.crossover();
             algorithm.mutate();

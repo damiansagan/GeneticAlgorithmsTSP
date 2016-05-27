@@ -33,15 +33,16 @@ class Algorithm {
     }
 
     void linearSelection() {
-        int size = solutionList.size();
-        List<Solution> newPopulation = new ArrayList<>(size);
+        double Sn=(1+solutionList.size())*0.5*solutionList.size();
+        List<Solution> newPopulation = new ArrayList<>(solutionList.size());
         Collections.sort(solutionList,Collections.reverseOrder());
+        double rescale = (double)solutionList.size()/Sn;
         while(newPopulation.size()<solutionList.size()) {
             ListIterator<Solution> iterator = solutionList.listIterator();
             int index = 1;
             while (iterator.hasNext() && newPopulation.size() < solutionList.size()) {
                 Solution solution = iterator.next();
-                if (probabilityTest((double) index / size))
+                if (generator.nextDouble()*rescale <= (double) index / Sn)
                     newPopulation.add(solution);
                 index++;
             }
@@ -66,7 +67,7 @@ class Algorithm {
                 solution.mutate(coefficientOfMutatedGenesInChromosomes);
     }
 
-    void analyzePopulation() {
+    void analyzePopulation(){
         if(solutionList==null || solutionList.isEmpty()) return;
         currentBestSolution=Collections.min(solutionList);
         currentMinimalFitness=currentBestSolution.getFitness();
