@@ -32,11 +32,20 @@ class Algorithm {
         solutionList = Solution.produce(initialPopulation,region);
     }
 
-    void linearSelection() {
-        double Sn=(1+solutionList.size())*0.5*solutionList.size();
-        List<Solution> newPopulation = new ArrayList<>(solutionList.size());
+    void randomSelection(double coefficientOfLinearSelection) {
+        if (solutionList == null || solutionList.size() < 2) return;
+        boolean linearSelection = probabilityTest(coefficientOfLinearSelection);
+        if (linearSelection)
+            linearSelection(); //linear selection algorithm
+        else
+            rouletteSelection(); //roulette selection algorithm
+    }
+
+    private void linearSelection(){
         Collections.sort(solutionList,Collections.reverseOrder());
+        double Sn=(1+solutionList.size())*0.5*solutionList.size();
         double rescale = (double)solutionList.size()/Sn;
+        List<Solution> newPopulation = new ArrayList<>(solutionList.size());
         while(newPopulation.size()<solutionList.size()) {
             ListIterator<Solution> iterator = solutionList.listIterator();
             int index = 1;
@@ -50,15 +59,43 @@ class Algorithm {
         solutionList=newPopulation;
     }
 
-    void crossover() {
-        List<Solution> temp = new ArrayList<>();
-        for(Solution first : solutionList){
-
-                Solution second = solutionList.get(generator.nextInt(solutionList.size()));
-                temp.addAll(Solution.makeOffspringFrom(first, second));
-
+    private void rouletteSelection() {
+        int sum = 0;
+        int maxValue = Integer.MIN_VALUE;
+        int minValue = Integer.MAX_VALUE;
+        int val;
+        for(Solution solution : solutionList) {
+            val = solution.getFitness();
+            sum += val;
+            if(val>maxValue) maxValue = val;
+            if(val<minValue) minValue = val;
         }
-        solutionList = temp;
+        double rescale = (double)(maxValue-minValue+1) / (sum+1);
+        List<Solution> newPopulation = new ArrayList<>(solutionList.size());
+        while(newPopulation.size()<solutionList.size()) {
+            ListIterator<Solution> iterator = solutionList.listIterator();
+            int index = 1;
+            while (iterator.hasNext() && newPopulation.size() < solutionList.size()) {
+                Solution solution = iterator.next();
+                if (generator.nextDouble()*rescale <= (double)(maxValue-solution.getFitness()+1) / (sum+1))
+                    newPopulation.add(solution);
+                index++;
+            }
+        }
+        solutionList=newPopulation;
+    }
+
+    void crossover() {
+        List<Solution> newPopulation = new ArrayList<>(solutionList.size());
+        Collections.sort(solutionList);
+        newPopulation.addAll(solutionList.subList(0,generator.nextInt(solutionList.size())));
+        while(newPopulation.size()<solutionList.size()){
+            newPopulation.addAll(Solution.makeOffspringFrom(
+                    solutionList.get(generator.nextInt(solutionList.size())),
+                    solutionList.get(generator.nextInt(solutionList.size()))
+            ));
+        }
+        solutionList=newPopulation;
     }
 
     void mutate() {

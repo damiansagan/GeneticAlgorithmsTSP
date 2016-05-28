@@ -12,19 +12,19 @@ public class Main {
         XYSeries chartSeriesGenetic = new XYSeries("genetic");
         XYSeries population = new XYSeries("population");
         Algorithm algorithm = new Algorithm(
-                50, //numberOfChromosomes
-                10000, //initialPopulation
-                1000, //generationsRequired
+                100, //numberOfChromosomes
+                1000, //initialPopulation
+                5000, //generationsRequired
                 0, //maximalAcceptableFitness
-                0.00001, //coefficientOfMutantsEachGeneration
-                0.00001 //coefficientOfMutatedGenesInChromosomes
+                0.1, //coefficientOfMutantsEachGeneration
+                0.005 //coefficientOfMutatedGenesInChromosomes
         );
         //algorithm.testPrint();
 
         while(!algorithm.isFinished()){
             //algorithm.printPopulation();
-            algorithm.linearSelection();
-            //algorithm.crossover();
+            algorithm.randomSelection(0.88);
+            algorithm.crossover();
             algorithm.mutate();
             algorithm.analyzePopulation();
             chartSeriesGenetic.add(algorithm.getGeneration(), algorithm.getMinimalFitness());
