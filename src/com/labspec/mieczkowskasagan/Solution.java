@@ -67,13 +67,6 @@ class Solution implements Comparable<Solution>{
         return sum;
     }
 
-    void mutateTEST(double coefficient){
-        if(series==null || series.size()<2) return;
-        while(generator.nextDouble() <= coefficient){
-            Collections.swap(series,generator.nextInt(series.size()),generator.nextInt(series.size()));
-        }
-    }
-
     void mutate(double coefficient){
         //there will be implemented mutation algorithm
         int numberOfMutations = (int)Math.ceil(coefficient*series.size())%series.size();

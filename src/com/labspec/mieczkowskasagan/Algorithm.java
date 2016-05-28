@@ -8,8 +8,6 @@ class Algorithm {
     //variables
     private final Region region;
     private List<Solution> solutionList;//population
-    private List<Solution> childrenList;
-    private boolean isSorted = false;
 
     private int currentNumberOfGeneration = 0;
     private int currentMinimalFitness = Integer.MAX_VALUE;
@@ -20,6 +18,7 @@ class Algorithm {
     private final int maximalAcceptableFitness;
     private final double coefficientOfMutantsEachGeneration;
     private final double coefficientOfMutatedGenesInChromosomes;
+    private final int initialPopulation;
 
 
     Algorithm(int numberOfChromosomes, int initialPopulation, int generationsRequired, int maximalAcceptableFitness,
@@ -28,6 +27,7 @@ class Algorithm {
         this.maximalAcceptableFitness = maximalAcceptableFitness;
         this.coefficientOfMutantsEachGeneration = coefficientOfMutantsEachGeneration;
         this.coefficientOfMutatedGenesInChromosomes = coefficientOfMutatedGenesInChromosomes;
+        this.initialPopulation=initialPopulation;
         region = new RandomDistancesRegion(numberOfChromosomes);
         solutionList = Solution.produce(initialPopulation,region);
     }
@@ -46,10 +46,10 @@ class Algorithm {
         double Sn=(1+solutionList.size())*0.5*solutionList.size();
         double rescale = (double)solutionList.size()/Sn;
         List<Solution> newPopulation = new ArrayList<>(solutionList.size());
-        while(newPopulation.size()<solutionList.size()) {
+        while(newPopulation.size()<initialPopulation) {
             ListIterator<Solution> iterator = solutionList.listIterator();
             int index = 1;
-            while (iterator.hasNext() && newPopulation.size() < solutionList.size()) {
+            while (iterator.hasNext() && newPopulation.size() < initialPopulation) {
                 Solution solution = iterator.next();
                 if (generator.nextDouble()*rescale <= (double) index / Sn)
                     newPopulation.add(solution);
@@ -72,10 +72,10 @@ class Algorithm {
         }
         double rescale = (double)(maxValue-minValue+1) / (sum+1);
         List<Solution> newPopulation = new ArrayList<>(solutionList.size());
-        while(newPopulation.size()<solutionList.size()) {
+        while(newPopulation.size()<initialPopulation) {
             ListIterator<Solution> iterator = solutionList.listIterator();
             int index = 1;
-            while (iterator.hasNext() && newPopulation.size() < solutionList.size()) {
+            while (iterator.hasNext() && newPopulation.size() < initialPopulation) {
                 Solution solution = iterator.next();
                 if (generator.nextDouble()*rescale <= (double)(maxValue-solution.getFitness()+1) / (sum+1))
                     newPopulation.add(solution);
@@ -89,7 +89,7 @@ class Algorithm {
         List<Solution> newPopulation = new ArrayList<>(solutionList.size());
         Collections.sort(solutionList);
         newPopulation.addAll(solutionList.subList(0,generator.nextInt(solutionList.size())));
-        while(newPopulation.size()<solutionList.size()){
+        while(newPopulation.size()<initialPopulation){
             newPopulation.addAll(Solution.makeOffspringFrom(
                     solutionList.get(generator.nextInt(solutionList.size())),
                     solutionList.get(generator.nextInt(solutionList.size()))
