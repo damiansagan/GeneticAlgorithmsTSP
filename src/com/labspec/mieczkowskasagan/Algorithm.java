@@ -122,7 +122,6 @@ class Algorithm {
     }
 
     void testPrint(){
-        new GreedySolution(region);
 //        for(Integer i : region.getListOfCities())
 //            System.out.println("From: " + i +" to: "+ region.getNearestCityFrom(i) +
 //                    " minimum is: " + region.getDistanceBetween(i,region.getNearestCityFrom(i)));
@@ -144,6 +143,7 @@ class Algorithm {
         }
     }
 
+    int getGreedyFitness() { return new GreedySolution(region).getFitness(); }
     int getNumberOfSolutions(){
         return solutionList.size();
     }

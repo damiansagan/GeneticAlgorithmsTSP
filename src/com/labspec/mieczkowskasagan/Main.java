@@ -1,6 +1,7 @@
 package com.labspec.mieczkowskasagan;
 
 import org.jfree.data.xy.XYSeries;
+import org.jfree.data.xy.XYSeriesCollection;
 
 import javax.swing.*;
 import java.awt.*;
@@ -9,7 +10,8 @@ import java.lang.reflect.InvocationTargetException;
 public class Main {
 
     public static void main(String[] args) throws InvocationTargetException, InterruptedException {
-        XYSeries chartSeriesGenetic = new XYSeries("genetic");
+        XYSeries genetic = new XYSeries("genetic");
+        XYSeries greedy = new XYSeries("greedy");
         XYSeries population = new XYSeries("population");
         Algorithm algorithm = new Algorithm(
                 100, //numberOfChromosomes
@@ -27,21 +29,25 @@ public class Main {
             algorithm.crossover();
             algorithm.mutate();
             algorithm.analyzePopulation();
-            chartSeriesGenetic.add(algorithm.getGeneration(), algorithm.getMinimalFitness());
+            genetic.add(algorithm.getGeneration(), algorithm.getMinimalFitness());
+            greedy.add(algorithm.getGeneration(), algorithm.getGreedyFitness());
             population.add(algorithm.getGeneration(),algorithm.getNumberOfSolutions());
         }
 
-        showGUI(population, "Population in function of generation", "generation number", "population");
-        showGUI(chartSeriesGenetic, "Fitness in function of generation", "generation number", "fitness");
+        XYSeriesCollection populationCollection = new XYSeriesCollection(population);
+        XYSeriesCollection fitnessCollection = new XYSeriesCollection(genetic);
+        fitnessCollection.addSeries(greedy);
+        showGUI(populationCollection, "Population in function of generation", "generation number", "population");
+        showGUI(fitnessCollection, "Fitness in function of generation", "generation number", "fitness");
     }
 
-    private static void showGUI(XYSeries chartSeries, String title, String XAxis, String YAxis) throws InvocationTargetException, InterruptedException {
+    private static void showGUI(XYSeriesCollection dataset, String title, String XAxis, String YAxis) throws InvocationTargetException, InterruptedException {
         // provide GUI to be run on SWING thread
         SwingUtilities.invokeAndWait(new Runnable() {
             @Override
             public void run() {
                 // create GUI object
-                ChartManager chartManagerGenetic = new ChartManager(chartSeries,XAxis,YAxis);
+                ChartManager chartManagerGenetic = new ChartManager(dataset,XAxis,YAxis);
                 startJFrame(chartManagerGenetic, title);
             }
         });

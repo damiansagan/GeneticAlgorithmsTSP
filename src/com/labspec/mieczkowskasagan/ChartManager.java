@@ -4,7 +4,6 @@ import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
-import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
 import java.awt.*;
@@ -14,13 +13,13 @@ class ChartManager {
     private JFreeChart chart;
     private ChartPanel chartPanel;
 
-    ChartManager(XYSeries series, String xAxis, String yAxis) {
+    ChartManager(XYSeriesCollection dataset, String xAxis, String yAxis) {
         chart = ChartFactory.createXYLineChart(null, // Title
                 xAxis, // X-Axis label
                 yAxis, // Y-Axis label
-                new XYSeriesCollection(series), // Dataset
+                dataset, // Dataset
                 PlotOrientation.VERTICAL, // Plot orientation
-                false, // show legend
+                true, // show legend
                 false, // Show tooltips
                 false // url show
         );
