@@ -1,6 +1,7 @@
 package com.labspec.mieczkowskasagan;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 
 
@@ -24,13 +25,13 @@ class RandomDistancesRegion extends Region {
     }
 
     @Override
-    public Integer getNearestCityFrom(int city) {
+    public Integer getNearestCityFrom(Integer city, List<Integer> excluding) {
         Integer nearest = null;
         int min = Integer.MAX_VALUE;
         int val;
         for(int i = 0; i<getNumberOfCities();i++) {
             val = distancesBetweenCities[city][i];
-            if(val<min && val > 0){
+            if(val<min && val > 0 && !excluding.contains(i)){
                 min = val;
                 nearest=i;
             }

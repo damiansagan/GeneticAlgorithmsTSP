@@ -4,11 +4,11 @@ package com.labspec.mieczkowskasagan;
 import java.util.*;
 
 class Solution implements Comparable<Solution>{
-    private static final Random generator = new Random();
+    static final Random generator = new Random();
 
     private Integer fitness;
-    private List<Integer> series;
-    private Region region;
+    List<Integer> series;
+    Region region;
 
     Solution(Region region) {
         if(region==null) return;
@@ -107,7 +107,7 @@ class Solution implements Comparable<Solution>{
     @Override
     public String toString() {
         return "Solution{" +
-                "fitness=" + fitness +
+                "fitness=" + getFitness() +
                 ", series=" + series +
                 '}';
     }

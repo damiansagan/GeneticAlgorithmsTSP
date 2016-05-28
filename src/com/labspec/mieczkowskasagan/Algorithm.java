@@ -121,7 +121,8 @@ class Algorithm {
         return generator.nextDouble() <= probability;
     }
 
-    public void testPrint(){
+    void testPrint(){
+        new GreedySolution(region);
 //        for(Integer i : region.getListOfCities())
 //            System.out.println("From: " + i +" to: "+ region.getNearestCityFrom(i) +
 //                    " minimum is: " + region.getDistanceBetween(i,region.getNearestCityFrom(i)));

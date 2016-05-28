@@ -13,7 +13,7 @@ public class RandomXYRegion {
     WAŻNE: na zewnątrz ma być nie widać, że to jest zaimplementowane jako Point,
     czyli zgodnie z sygnaturami klasy bazowej :)
     public abstract int getDistanceBetween(int cityA, int cityB);
-    public abstract Integer getNearestCityFrom(int city);
+    public abstract Integer getNearestCityFrom(Integer city, List<Integer> excluding);
 
     zrob tez metode get city position: Point getPosition(int city);
     przyda się potem podczas rysowania :)

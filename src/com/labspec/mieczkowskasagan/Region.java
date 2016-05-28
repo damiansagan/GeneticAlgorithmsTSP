@@ -15,7 +15,7 @@ abstract class Region {
     }
 
     public abstract int getDistanceBetween(int cityA, int cityB);
-    public abstract Integer getNearestCityFrom(int city);
+    public abstract Integer getNearestCityFrom(Integer city, List<Integer> excluding);
 
     Integer getNumberOfCities(){ return listOfCities.size(); }
     public List<Integer> getListOfCities() {
