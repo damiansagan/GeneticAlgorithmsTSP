@@ -60,7 +60,7 @@ class Algorithm {
     }
 
     void rouletteSelection() {
-        int sum = 0;
+        double sum = 0;
         double maxValue = Double.MIN_VALUE;
         double minValue = Double.MAX_VALUE;
         double val;
