@@ -10,7 +10,7 @@ class Algorithm {
     private List<Solution> solutionList;//population
 
     private int currentNumberOfGeneration = 0;
-    private int currentMinimalFitness = Integer.MAX_VALUE;
+    private double currentMinimalFitness = Double.MAX_VALUE;
     private Solution currentBestSolution = null;
 
     //parameters
@@ -61,25 +61,23 @@ class Algorithm {
 
     private void rouletteSelection() {
         int sum = 0;
-        int maxValue = Integer.MIN_VALUE;
-        int minValue = Integer.MAX_VALUE;
-        int val;
+        double maxValue = Double.MIN_VALUE;
+        double minValue = Double.MAX_VALUE;
+        double val;
         for(Solution solution : solutionList) {
             val = solution.getFitness();
             sum += val;
             if(val>maxValue) maxValue = val;
             if(val<minValue) minValue = val;
         }
-        double rescale = (double)(maxValue-minValue+1) / (sum+1);
+        double rescale = (maxValue-minValue+1) / (sum+1);
         List<Solution> newPopulation = new ArrayList<>(solutionList.size());
         while(newPopulation.size()<initialPopulation) {
             ListIterator<Solution> iterator = solutionList.listIterator();
-            int index = 1;
             while (iterator.hasNext() && newPopulation.size() < initialPopulation) {
                 Solution solution = iterator.next();
-                if (generator.nextDouble()*rescale <= (double)(maxValue-solution.getFitness()+1) / (sum+1))
+                if (generator.nextDouble()*rescale <= (maxValue-solution.getFitness()+1) / (sum+1))
                     newPopulation.add(solution);
-                index++;
             }
         }
         solutionList=newPopulation;
@@ -143,12 +141,12 @@ class Algorithm {
         }
     }
 
-    int getGreedyFitness() { return new GreedySolution(region).getFitness(); }
+    Double getGreedyFitness() { return new GreedySolution(region).getFitness(); }
     int getNumberOfSolutions(){
         return solutionList.size();
     }
     int getGeneration() { return currentNumberOfGeneration;  }
-    int getMinimalFitness() { return currentMinimalFitness; }
+    Double getMinimalFitness() { return currentMinimalFitness; }
     Solution getCurrentBestSolution() { return currentBestSolution; }
     void printPopulation(){ System.out.println(solutionList.toString().replaceAll("},", "}," + System.getProperty("line.separator"))); }
 

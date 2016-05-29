@@ -6,7 +6,7 @@ import java.util.*;
 class Solution implements Comparable<Solution>{
     static final Random generator = new Random();
 
-    private Integer fitness;
+    private Double fitness;
     List<Integer> series;
     Region region;
 
@@ -50,13 +50,13 @@ class Solution implements Comparable<Solution>{
         return offspring;
     }
 
-    private Integer computeFitness(){
+    private Double computeFitness(){
         //there will be fitness computing method
         if(series == null || series.isEmpty()) throw new IllegalStateException();
         final ListIterator<Integer> iterator = series.listIterator();
         int first = iterator.next();
         int prev = first;
-        int sum = 0;
+        double sum = 0;
         int current;
         while (iterator.hasNext()) {
             current = iterator.next();
@@ -112,7 +112,7 @@ class Solution implements Comparable<Solution>{
                 '}';
     }
 
-    Integer getFitness() {
+    Double getFitness() {
         return fitness != null ? fitness : (fitness = computeFitness());
     }
 
