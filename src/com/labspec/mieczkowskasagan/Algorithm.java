@@ -28,7 +28,7 @@ class Algorithm {
         this.coefficientOfMutantsEachGeneration = coefficientOfMutantsEachGeneration;
         this.coefficientOfMutatedGenesInChromosomes = coefficientOfMutatedGenesInChromosomes;
         this.initialPopulation=initialPopulation;
-        region = new RandomDistancesRegion(numberOfChromosomes);
+        region = new RandomXYRegion(numberOfChromosomes);
         solutionList = Solution.produce(initialPopulation,region);
     }
 

@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
-
+/*
 class RandomDistancesRegion extends Region {
 
     private int[][] distancesBetweenCities;
@@ -40,7 +40,7 @@ class RandomDistancesRegion extends Region {
     }
 
     @Override
-    public int getDistanceBetween(int cityA, int cityB){
+    public double getDistanceBetween(int cityA, int cityB){
         return distancesBetweenCities[cityA][cityB];
     }
 
@@ -49,3 +49,4 @@ class RandomDistancesRegion extends Region {
         return Arrays.deepToString(distancesBetweenCities).replaceAll("],", "]," + System.getProperty("line.separator"));
     }
 }
+*/

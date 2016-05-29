@@ -14,7 +14,7 @@ abstract class Region {
         IntStream.range(0, numberOfCities).forEach(listOfCities::add);
     }
 
-    public abstract int getDistanceBetween(int cityA, int cityB);
+    public abstract double getDistanceBetween(int cityA, int cityB);
     public abstract Integer getNearestCityFrom(Integer city, List<Integer> excluding);
 
     Integer getNumberOfCities(){ return listOfCities.size(); }
