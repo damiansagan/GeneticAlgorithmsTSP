@@ -25,7 +25,7 @@ public class Main {
 
         while(!algorithm.isFinished()){
             //algorithm.printPopulation();
-            algorithm.randomSelection(0.88);
+            algorithm.linearSelection();
             algorithm.crossover();
             algorithm.mutate();
             algorithm.analyzePopulation();

@@ -41,7 +41,7 @@ class Algorithm {
             rouletteSelection(); //roulette selection algorithm
     }
 
-    private void linearSelection(){
+    void linearSelection(){
         Collections.sort(solutionList,Collections.reverseOrder());
         double Sn=(1+solutionList.size())*0.5*solutionList.size();
         double rescale = (double)solutionList.size()/Sn;
@@ -59,7 +59,7 @@ class Algorithm {
         solutionList=newPopulation;
     }
 
-    private void rouletteSelection() {
+    void rouletteSelection() {
         int sum = 0;
         double maxValue = Double.MIN_VALUE;
         double minValue = Double.MAX_VALUE;
