@@ -16,22 +16,23 @@ public class Main {
 
         GeneticParameters parameters = new GeneticParameters(
                 1000, //initialPopulation
-                2000, //generationsRequired
+                5000, //generationsRequired
                 0, //maximalAcceptableFitness
                 0.2, //coefficientOfMutantsEachGeneration
                 0.005 //coefficientOfMutatedGenesInChromosomes
         );
 
-        Population population = new Population(region,parameters);
 
-        //Double g = new GreedyExperiment().getFitness();
+        Double g = new GreedyExperiment(region).getFitness();
+
+        Population population = new Population(region,parameters);
         while(!population.fulfillCriteria()){
             population.linearSelection();
             population.crossover();
             population.mutate();
             population.analyze();
             genetic.add(population.getGenerationNumber(), population.getBestFitness());
-            //greedy.add(population.getGenerationNumber(), g);
+            greedy.add(population.getGenerationNumber(), g);
         }
 
 
