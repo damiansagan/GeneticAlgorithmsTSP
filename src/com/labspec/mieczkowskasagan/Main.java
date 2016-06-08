@@ -12,32 +12,31 @@ public class Main {
     public static void main(String[] args) throws InvocationTargetException, InterruptedException {
         XYSeries genetic = new XYSeries("genetic");
         XYSeries greedy = new XYSeries("greedy");
-        XYSeries population = new XYSeries("population");
-        Algorithm algorithm = new Algorithm(
-                100, //numberOfChromosomes
+        Region region = new RandomXYRegion(100); //numberOfCities
+
+        GeneticParameters parameters = new GeneticParameters(
                 1000, //initialPopulation
-                5000, //generationsRequired
+                2000, //generationsRequired
                 0, //maximalAcceptableFitness
-                0.1, //coefficientOfMutantsEachGeneration
+                0.2, //coefficientOfMutantsEachGeneration
                 0.005 //coefficientOfMutatedGenesInChromosomes
         );
-        //algorithm.testPrint();
 
-        while(!algorithm.isFinished()){
-            //algorithm.printPopulation();
-            algorithm.linearSelection();
-            algorithm.crossover();
-            algorithm.mutate();
-            algorithm.analyzePopulation();
-            genetic.add(algorithm.getGeneration(), algorithm.getMinimalFitness());
-            greedy.add(algorithm.getGeneration(), algorithm.getGreedyFitness());
-            population.add(algorithm.getGeneration(),algorithm.getNumberOfSolutions());
+        Population population = new Population(region,parameters);
+
+        //Double g = new GreedyExperiment().getFitness();
+        while(!population.fulfillCriteria()){
+            population.linearSelection();
+            population.crossover();
+            population.mutate();
+            population.analyze();
+            genetic.add(population.getGenerationNumber(), population.getBestFitness());
+            //greedy.add(population.getGenerationNumber(), g);
         }
 
-        XYSeriesCollection populationCollection = new XYSeriesCollection(population);
+
         XYSeriesCollection fitnessCollection = new XYSeriesCollection(genetic);
         fitnessCollection.addSeries(greedy);
-        showGUI(populationCollection, "Population in function of generation", "generation number", "population");
         showGUI(fitnessCollection, "Fitness in function of generation", "generation number", "fitness");
     }
 

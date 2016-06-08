@@ -2,34 +2,22 @@ package com.labspec.mieczkowskasagan;
 
 import java.util.*;
 
-class Algorithm {
+class Population {
     private static final Random generator = new Random();
+    private static int counter = 0;
 
-    //variables
-    private final Region region;
-    private List<Solution> solutionList;//population
+    private int id;
+    private int generation = 0;
+    private final GeneticParameters parameters;
 
-    private int currentNumberOfGeneration = 0;
-    private double currentMinimalFitness = Double.MAX_VALUE;
-    private Solution currentBestSolution = null;
+    private List<Solution> solutionList;
+    private Solution bestSolution = null;
+    private double bestFitness = Double.MAX_VALUE;
 
-    //parameters
-    private final int generationsRequired;
-    private final int maximalAcceptableFitness;
-    private final double coefficientOfMutantsEachGeneration;
-    private final double coefficientOfMutatedGenesInChromosomes;
-    private final int initialPopulation;
-
-
-    Algorithm(int numberOfChromosomes, int initialPopulation, int generationsRequired, int maximalAcceptableFitness,
-              double coefficientOfMutantsEachGeneration, double coefficientOfMutatedGenesInChromosomes) {
-        this.generationsRequired = generationsRequired;
-        this.maximalAcceptableFitness = maximalAcceptableFitness;
-        this.coefficientOfMutantsEachGeneration = coefficientOfMutantsEachGeneration;
-        this.coefficientOfMutatedGenesInChromosomes = coefficientOfMutatedGenesInChromosomes;
-        this.initialPopulation=initialPopulation;
-        region = new RandomXYRegion(numberOfChromosomes);
-        solutionList = Solution.produce(initialPopulation,region);
+    Population(Region region, GeneticParameters parameters) {
+        this.id=++counter;
+        this.parameters=parameters;
+        solutionList = Solution.produce(parameters.getInitialPopulation(),region);
     }
 
     void randomSelection(double coefficientOfLinearSelection) {
@@ -46,10 +34,10 @@ class Algorithm {
         double Sn=(1+solutionList.size())*0.5*solutionList.size();
         double rescale = (double)solutionList.size()/Sn;
         List<Solution> newPopulation = new ArrayList<>(solutionList.size());
-        while(newPopulation.size()<initialPopulation) {
+        while(newPopulation.size()<parameters.getInitialPopulation()) {
             ListIterator<Solution> iterator = solutionList.listIterator();
             int index = 1;
-            while (iterator.hasNext() && newPopulation.size() < initialPopulation) {
+            while (iterator.hasNext() && newPopulation.size() < parameters.getInitialPopulation()) {
                 Solution solution = iterator.next();
                 if (generator.nextDouble()*rescale <= (double) index / Sn)
                     newPopulation.add(solution);
@@ -72,9 +60,9 @@ class Algorithm {
         }
         double rescale = (maxValue-minValue+1) / (sum+1);
         List<Solution> newPopulation = new ArrayList<>(solutionList.size());
-        while(newPopulation.size()<initialPopulation) {
+        while(newPopulation.size()<parameters.getInitialPopulation()) {
             ListIterator<Solution> iterator = solutionList.listIterator();
-            while (iterator.hasNext() && newPopulation.size() < initialPopulation) {
+            while (iterator.hasNext() && newPopulation.size() < parameters.getInitialPopulation()) {
                 Solution solution = iterator.next();
                 if (generator.nextDouble()*rescale <= (maxValue-solution.getFitness()+1) / (sum+1))
                     newPopulation.add(solution);
@@ -87,7 +75,7 @@ class Algorithm {
         List<Solution> newPopulation = new ArrayList<>(solutionList.size());
         Collections.sort(solutionList);
         newPopulation.addAll(solutionList.subList(0,generator.nextInt(solutionList.size())));
-        while(newPopulation.size()<initialPopulation){
+        while(newPopulation.size()<parameters.getInitialPopulation()){
             newPopulation.addAll(Solution.makeOffspringFrom(
                     solutionList.get(generator.nextInt(solutionList.size())),
                     solutionList.get(generator.nextInt(solutionList.size()))
@@ -98,37 +86,28 @@ class Algorithm {
 
     void mutate() {
         for(Solution solution : solutionList)
-            if(probabilityTest(coefficientOfMutantsEachGeneration))
-                solution.mutate(coefficientOfMutatedGenesInChromosomes);
+            if(probabilityTest(parameters.getCoefficientOfMutantsEachGeneration()))
+                solution.mutate(parameters.getCoefficientOfMutatedGenesInChromosomes());
     }
 
-    void analyzePopulation(){
+    void analyze(){
         if(solutionList==null || solutionList.isEmpty()) return;
-        currentBestSolution=Collections.min(solutionList);
-        currentMinimalFitness=currentBestSolution.getFitness();
+        bestSolution =Collections.min(solutionList);
+        bestFitness = bestSolution.getFitness();
     }
 
-    boolean isFinished(){
-        currentNumberOfGeneration++;
-        System.out.println("Generation number: " + currentNumberOfGeneration);
-        return currentNumberOfGeneration >= generationsRequired ||
-                currentMinimalFitness <= maximalAcceptableFitness || solutionList.size()<2;
+    boolean fulfillCriteria(){
+        generation++;
+        System.out.println("Generation number: " + generation);
+        return generation >= parameters.getGenerationsRequired() ||
+                bestFitness <= parameters.getMaximalAcceptableFitness() || solutionList.size()<2;
     }
 
     private boolean probabilityTest(double probability){
         return generator.nextDouble() <= probability;
     }
 
-    void testPrint(){
-//        for(Integer i : region.getListOfCities())
-//            System.out.println("From: " + i +" to: "+ region.getNearestCityFrom(i) +
-//                    " minimum is: " + region.getDistanceBetween(i,region.getNearestCityFrom(i)));
-//        System.out.println(region);
-//        crossoverTest();
-//        System.out.println(solutionList.toString().replaceAll("},", "}," + System.getProperty("line.separator")));
-    }
-
-    private void crossoverTest(){
+    private void crossoverTest(Region region){
         Solution s1 = new Solution(region);
         Solution s2 = new Solution(region);
         System.out.println(s1);
@@ -141,20 +120,19 @@ class Algorithm {
         }
     }
 
-    Double getGreedyFitness() { return new GreedySolution(region).getFitness(); }
-    int getNumberOfSolutions(){
+    int getSize(){
         return solutionList.size();
     }
-    int getGeneration() { return currentNumberOfGeneration;  }
-    Double getMinimalFitness() { return currentMinimalFitness; }
-    Solution getCurrentBestSolution() { return currentBestSolution; }
+    int getGenerationNumber() { return generation;  }
+    Double getBestFitness() { return bestFitness; }
+    Solution getBestSolution() { return bestSolution; }
     void printPopulation(){ System.out.println(solutionList.toString().replaceAll("},", "}," + System.getProperty("line.separator"))); }
 
     @Override
     public String toString() {
-        return "Algorithm{" +
-                "currentMinimalFitness=" + currentMinimalFitness +
-                ", currentNumberOfGeneration=" + currentNumberOfGeneration +
+        return "Population{" +
+                "bestFitness=" + bestFitness +
+                ", generation=" + generation +
                 '}';
     }
 }

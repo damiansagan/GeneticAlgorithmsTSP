@@ -4,9 +4,9 @@ package com.labspec.mieczkowskasagan;
 import java.util.*;
 
 class Solution implements Comparable<Solution>{
-    static final Random generator = new Random();
+    private static final Random generator = new Random();
 
-    private Double fitness;
+    Double fitness;
     List<Integer> series;
     Region region;
 
