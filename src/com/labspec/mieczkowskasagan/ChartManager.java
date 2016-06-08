@@ -24,16 +24,15 @@ class ChartManager {
                 false // url show
         );
 
-        formatPlot(chart);
+        formatXYPlot(chart);
         setChartPanel(new ChartPanel(chart));
     }
 
-    private void formatPlot(JFreeChart chart) {
+    private void formatXYPlot(JFreeChart chart) {
         XYPlot xyPlot = chart.getXYPlot();
         xyPlot.setBackgroundPaint(Color.WHITE);
         xyPlot.setRangeGridlinePaint(Color.BLACK);
         xyPlot.setDomainGridlinePaint(Color.BLACK);
-
 //        NumberAxis domainAxis = (NumberAxis) xyPlot.getDomainAxis();
 //        domainAxis.setTickUnit(new NumberTickUnit(1));
     }

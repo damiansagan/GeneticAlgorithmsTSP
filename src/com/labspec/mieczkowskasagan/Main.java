@@ -1,56 +1,41 @@
 package com.labspec.mieczkowskasagan;
 
-import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
 import javax.swing.*;
 import java.awt.*;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.List;
+
+import static javax.swing.SwingUtilities.invokeAndWait;
 
 public class Main {
 
     public static void main(String[] args) throws InvocationTargetException, InterruptedException {
-        XYSeries genetic = new XYSeries("genetic");
-        XYSeries greedy = new XYSeries("greedy");
         Region region = new RandomXYRegion(100); //numberOfCities
-
         GeneticParameters parameters = new GeneticParameters(
                 1000, //initialPopulation
-                5000, //generationsRequired
+                500, //generationsRequired
                 0, //maximalAcceptableFitness
                 0.2, //coefficientOfMutantsEachGeneration
                 0.005 //coefficientOfMutatedGenesInChromosomes
         );
 
-
-        Double g = new GreedyExperiment(region).getFitness();
-
-        Population population = new Population(region,parameters);
-        while(!population.fulfillCriteria()){
-            population.linearSelection();
-            population.crossover();
-            population.mutate();
-            population.analyze();
-            genetic.add(population.getGenerationNumber(), population.getBestFitness());
-            greedy.add(population.getGenerationNumber(), g);
-        }
+        List<Thread> threads= new ArrayList<>();
+        threads.add(new Thread(new GreedyExperiment(region)));
+        for(int i = 0; i<2; i++)
+            threads.add(new Thread(new GeneticExperiment(region,parameters)));
+        threads.forEach(Thread::start);
 
 
-        XYSeriesCollection fitnessCollection = new XYSeriesCollection(genetic);
-        fitnessCollection.addSeries(greedy);
+        XYSeriesCollection fitnessCollection = new XYSeriesCollection();
+        //fitnessCollection.addSeries();
         showGUI(fitnessCollection, "Fitness in function of generation", "generation number", "fitness");
     }
 
-    private static void showGUI(XYSeriesCollection dataset, String title, String XAxis, String YAxis) throws InvocationTargetException, InterruptedException {
-        // provide GUI to be run on SWING thread
-        SwingUtilities.invokeAndWait(new Runnable() {
-            @Override
-            public void run() {
-                // create GUI object
-                ChartManager chartManagerGenetic = new ChartManager(dataset,XAxis,YAxis);
-                startJFrame(chartManagerGenetic, title);
-            }
-        });
+    private static void showGUI(XYSeriesCollection xySeriesCollection, String title, String XAxis, String YAxis) throws InvocationTargetException, InterruptedException {
+        invokeAndWait(() -> startJFrame(new ChartManager(xySeriesCollection,XAxis,YAxis), title));
     }
 
     private static void startJFrame(ChartManager chartManager, String title){

@@ -4,9 +4,7 @@ import java.util.*;
 
 class Population {
     private static final Random generator = new Random();
-    private static int counter = 0;
 
-    private int id;
     private int generation = 0;
     private final GeneticParameters parameters;
 
@@ -15,7 +13,6 @@ class Population {
     private double bestFitness = Double.MAX_VALUE;
 
     Population(Region region, GeneticParameters parameters) {
-        this.id=++counter;
         this.parameters=parameters;
         solutionList = Solution.produce(parameters.getInitialPopulation(),region);
     }
@@ -98,7 +95,6 @@ class Population {
 
     boolean fulfillCriteria(){
         generation++;
-        System.out.println("Generation number: " + generation);
         return generation >= parameters.getGenerationsRequired() ||
                 bestFitness <= parameters.getMaximalAcceptableFitness() || solutionList.size()<2;
     }

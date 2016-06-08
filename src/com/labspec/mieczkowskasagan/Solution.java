@@ -52,7 +52,7 @@ class Solution implements Comparable<Solution>{
 
     private Double computeFitness(){
         //there will be fitness computing method
-        if(series == null || series.isEmpty()) throw new IllegalStateException();
+        if(series == null || series.isEmpty()) return null;
         final ListIterator<Integer> iterator = series.listIterator();
         int first = iterator.next();
         int prev = first;
