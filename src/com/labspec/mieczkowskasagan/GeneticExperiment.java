@@ -4,16 +4,15 @@ package com.labspec.mieczkowskasagan;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GeneticExperiment extends Experiment{
+class GeneticExperiment extends Experiment{
 
     private final GeneticParameters parameters;
     private List<Solution> solutions;
 
-    public GeneticExperiment(Region region, GeneticParameters parameters) {
+    GeneticExperiment(Region region, GeneticParameters parameters) {
         super(region);
         this.parameters = parameters;
         new Thread(this,getName()).start();
@@ -40,7 +39,7 @@ public class GeneticExperiment extends Experiment{
 
     @Override
     public String getName() {
-        return "genetic "+getId();
+        return "genetic"+getId();
     }
 
     public Region getRegion() {
@@ -51,11 +50,18 @@ public class GeneticExperiment extends Experiment{
         return parameters;
     }
 
-    public List<Solution> getSolutions() {
+    synchronized List<Solution> getSolutions() {
+        if(solutions.size()<parameters.getGenerationsRequired()-1)
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        notify();
         return solutions;
     }
 
-    public static List<Experiment> produce(Region region, GeneticParameters parameters, int n) {
+    static List<Experiment> produce(Region region, GeneticParameters parameters, int n) {
         List<Experiment> experiments= new ArrayList<>();
         experiments.add(new GreedyExperiment(region));
         for(int i = 0; i<n; i++)
@@ -63,11 +69,11 @@ public class GeneticExperiment extends Experiment{
         return experiments;
     }
 
-    public static XYSeriesCollection dispersionXYCollection (List<Experiment> experiments) throws InvocationTargetException, InterruptedException {
-        XYSeriesCollection fitnessCollection = new XYSeriesCollection();
-        XYSeries geneticSeries = new XYSeries("fluctuations of genetic");
+    static XYSeriesCollection dispersionXYCollection (List<Experiment> experiments) throws InterruptedException {
+        XYSeriesCollection dispersionXYCollection = new XYSeriesCollection();
+        XYSeries geneticSeries = new XYSeries("fluctuations of best genetic");
         XYSeries greedySeries = new XYSeries("best greedy solution");
-        java.util.List<Thread> seriesAdding = new ArrayList<>();
+        List<Thread> seriesAdding = new ArrayList<>();
         experiments.forEach(experiment ->
                 seriesAdding.add(new Thread(() -> {
                     if(experiment instanceof GeneticExperiment){
@@ -79,9 +85,45 @@ public class GeneticExperiment extends Experiment{
             t.start();
             t.join();
         }
-        fitnessCollection.addSeries(geneticSeries);
-        fitnessCollection.addSeries(greedySeries);
-        return fitnessCollection;
+        dispersionXYCollection.addSeries(geneticSeries);
+        dispersionXYCollection.addSeries(greedySeries);
+        return dispersionXYCollection;
+    }
+
+    private static XYSeries generateGreedyXYSeries(GreedyExperiment experiment,int generations){
+        XYSeries series = new XYSeries(experiment.getName());
+        double fitness = experiment.getSolution().getFitness();
+        series.add(1,fitness);
+        series.add(generations,fitness);
+        return series;
+    }
+
+    private static XYSeries generateGeneticXYSeries(GeneticExperiment experiment){
+        XYSeries series = new XYSeries(experiment.getName());
+        int i = 1;
+        List<Solution> solutions = experiment.getSolutions();
+        for(Solution s : solutions) {
+            series.add(i,s.getFitness());
+            i++;
+        }
+        return series;
+    }
+
+    static XYSeriesCollection generationXYCollection (List<Experiment> experiments, GeneticParameters parameters) throws InterruptedException {
+        XYSeriesCollection generationXYCollection = new XYSeriesCollection();
+        List<Thread> seriesAdding = new ArrayList<>();
+        experiments.forEach(experiment ->
+                seriesAdding.add(new Thread(() -> {
+                        if(experiment instanceof GeneticExperiment)
+                            generationXYCollection.addSeries(generateGeneticXYSeries((GeneticExperiment) experiment));
+                        else
+                            generationXYCollection.addSeries(generateGreedyXYSeries((GreedyExperiment) experiment,parameters.getGenerationsRequired()));
+                })));
+        for(Thread t : seriesAdding) {
+            t.start();
+            t.join();
+        }
+        return generationXYCollection;
     }
 
 }

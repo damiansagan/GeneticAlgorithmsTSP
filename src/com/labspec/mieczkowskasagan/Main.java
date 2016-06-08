@@ -1,6 +1,6 @@
 package com.labspec.mieczkowskasagan;
 
-import org.jfree.data.xy.XYSeriesCollection;
+import org.jfree.chart.JFreeChart;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,23 +12,29 @@ import static javax.swing.SwingUtilities.invokeAndWait;
 public class Main {
 
     public static void main(String[] args) throws InvocationTargetException, InterruptedException {
-        Region region = new RandomXYRegion(100); //numberOfCities
+        Region region = new RandomXYRegion(25); //numberOfCities
         GeneticParameters parameters = new GeneticParameters(
-                100, //initialPopulation
-                5000, //generationsRequired
-                0, //maximalAcceptableFitness
-                0.2, //coefficientOfMutantsEachGeneration
+                1000, //initialPopulation
+                200, //generationsRequired
+                0.01, //coefficientOfMutantsEachGeneration
                 0.005 //coefficientOfMutatedGenesInChromosomes
         );
 
-        List<Experiment> experiments = GeneticExperiment.produce(region,parameters,5);
+        List<Experiment> experiments = GeneticExperiment.produce(region,parameters,10);
 
-        showGUI(GeneticExperiment.dispersionXYCollection(experiments),
-                "Fitness in function of experiment", "experiment number", "fitness");
+        showGUI(ChartManager.createXYScatterChart(GeneticExperiment.dispersionXYCollection(experiments),
+                "Fitness in function of experiment",
+                "experiment number",
+                "fitness"));
+
+        showGUI(ChartManager.createXYLineChart(GeneticExperiment.generationXYCollection(experiments,parameters),
+                "Fitness in function of generation",
+                "generation number",
+                "fitness"));
     }
 
-    private static void showGUI(XYSeriesCollection xySeriesCollection, String title, String XAxis, String YAxis) throws InvocationTargetException, InterruptedException {
-        invokeAndWait(() -> startJFrame(new ChartManager(xySeriesCollection,XAxis,YAxis), title));
+    private static void showGUI(JFreeChart chart) throws InvocationTargetException, InterruptedException {
+        invokeAndWait(() -> startJFrame(new ChartManager(chart), chart.getTitle().toString()));
     }
 
     private static void startJFrame(ChartManager chartManager, String title){

@@ -5,14 +5,12 @@ class GeneticParameters {
 
     private int initialPopulation;
     private int generationsRequired;
-    private int maximalAcceptableFitness;
     private double coefficientOfMutantsEachGeneration;
     private double coefficientOfMutatedGenesInChromosomes;
 
-    GeneticParameters(int initialPopulation, int generationsRequired, int maximalAcceptableFitness, double coefficientOfMutantsEachGeneration, double coefficientOfMutatedGenesInChromosomes) {
+    GeneticParameters(int initialPopulation, int generationsRequired, double coefficientOfMutantsEachGeneration, double coefficientOfMutatedGenesInChromosomes) {
         this.initialPopulation = initialPopulation;
         this.generationsRequired = generationsRequired;
-        this.maximalAcceptableFitness = maximalAcceptableFitness;
         this.coefficientOfMutantsEachGeneration = coefficientOfMutantsEachGeneration;
         this.coefficientOfMutatedGenesInChromosomes = coefficientOfMutatedGenesInChromosomes;
     }
@@ -23,14 +21,6 @@ class GeneticParameters {
 
     void setGenerationsRequired(int generationsRequired) {
         this.generationsRequired = generationsRequired;
-    }
-
-    int getMaximalAcceptableFitness() {
-        return maximalAcceptableFitness;
-    }
-
-    void setMaximalAcceptableFitness(int maximalAcceptableFitness) {
-        this.maximalAcceptableFitness = maximalAcceptableFitness;
     }
 
     double getCoefficientOfMutantsEachGeneration() {

@@ -95,8 +95,7 @@ class Population {
 
     boolean fulfillCriteria(){
         generation++;
-        return generation >= parameters.getGenerationsRequired() ||
-                bestFitness <= parameters.getMaximalAcceptableFitness() || solutionList.size()<2;
+        return generation >= parameters.getGenerationsRequired() || solutionList.size()<2;
     }
 
     private boolean probabilityTest(double probability){

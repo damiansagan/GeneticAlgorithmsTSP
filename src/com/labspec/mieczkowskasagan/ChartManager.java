@@ -14,8 +14,14 @@ class ChartManager {
     private JFreeChart chart;
     private ChartPanel chartPanel;
 
-    ChartManager(XYSeriesCollection dataset, String xAxis, String yAxis) {
-        chart = ChartFactory.createScatterPlot(null, // Title
+    ChartManager(JFreeChart chart) {
+        this.chart =chart;
+        formatXYPlot(chart);
+        setChartPanel(new ChartPanel(chart));
+    }
+
+    static JFreeChart createXYLineChart(XYSeriesCollection dataset, String title, String xAxis, String yAxis) {
+        return ChartFactory.createXYLineChart(title, // Title
                 xAxis, // X-Axis label
                 yAxis, // Y-Axis label
                 dataset, // Dataset
@@ -24,10 +30,20 @@ class ChartManager {
                 false, // Show tooltips
                 false // url show
         );
-
-        formatXYPlot(chart);
-        setChartPanel(new ChartPanel(chart));
     }
+
+    static JFreeChart createXYScatterChart(XYSeriesCollection dataset, String title, String xAxis, String yAxis) {
+        return ChartFactory.createScatterPlot(title, // Title
+                xAxis, // X-Axis label
+                yAxis, // Y-Axis label
+                dataset, // Dataset
+                PlotOrientation.VERTICAL, // Plot orientation
+                true, // show legend
+                false, // Show tooltips
+                false // url show
+        );
+    }
+
 
     private void formatXYPlot(JFreeChart chart) {
         XYPlot xyPlot = chart.getXYPlot();

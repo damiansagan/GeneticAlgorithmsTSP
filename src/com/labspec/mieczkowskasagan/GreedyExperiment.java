@@ -1,16 +1,16 @@
 package com.labspec.mieczkowskasagan;
 
 
-public class GreedyExperiment extends Experiment  {
+class GreedyExperiment extends Experiment  {
 
-    public GreedyExperiment(Region region) {
+    GreedyExperiment(Region region) {
         super(region);
         new Thread(this,getName()).start();
     }
 
     @Override
     public String getName() {
-        return "greedy "+getId();
+        return "greedy"+getId();
     }
 
     @Override
