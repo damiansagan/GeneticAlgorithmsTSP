@@ -5,13 +5,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GeneticExperiment extends Experiment{
-    private final Region region;
+
     private final GeneticParameters parameters;
     private List<Solution> solutions;
 
     public GeneticExperiment(Region region, GeneticParameters parameters) {
-        this.region = region;
+        super(region);
         this.parameters = parameters;
+        new Thread(this,getName()).start();
     }
 
     @Override
@@ -26,17 +27,16 @@ public class GeneticExperiment extends Experiment{
             population.analyze();
             solutions.add(population.getBestSolution());
         }
+        solution=solutions.get(solutions.size()-1);
         System.out.println("GeneticExperiment of id: "+ getId() +" is finished.");
+        synchronized (this){
+            notify();
+        }
     }
 
     @Override
     public String getName() {
         return "genetic "+getId();
-    }
-
-    @Override
-    public Solution getSolution(){
-        return (solutions!=null && !solutions.isEmpty()) ? solutions.get(solutions.size()-1) : null;
     }
 
     public Region getRegion() {

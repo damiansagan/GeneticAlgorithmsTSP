@@ -1,5 +1,6 @@
 package com.labspec.mieczkowskasagan;
 
+import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
 import javax.swing.*;
@@ -15,23 +16,31 @@ public class Main {
     public static void main(String[] args) throws InvocationTargetException, InterruptedException {
         Region region = new RandomXYRegion(100); //numberOfCities
         GeneticParameters parameters = new GeneticParameters(
-                1000, //initialPopulation
-                500, //generationsRequired
+                100, //initialPopulation
+                5000, //generationsRequired
                 0, //maximalAcceptableFitness
                 0.2, //coefficientOfMutantsEachGeneration
                 0.005 //coefficientOfMutatedGenesInChromosomes
         );
 
-        List<Thread> threads= new ArrayList<>();
-        threads.add(new Thread(new GreedyExperiment(region)));
-        for(int i = 0; i<2; i++)
-            threads.add(new Thread(new GeneticExperiment(region,parameters)));
-        threads.forEach(Thread::start);
 
+        int NUMBER_OF_EXPERIMENTS = 10;
+        List<Experiment> experiments= new ArrayList<>();
+        experiments.add(new GreedyExperiment(region));
+        for(int i = 0; i<NUMBER_OF_EXPERIMENTS; i++)
+            experiments.add(new GeneticExperiment(region,parameters));
 
         XYSeriesCollection fitnessCollection = new XYSeriesCollection();
-        //fitnessCollection.addSeries();
-        showGUI(fitnessCollection, "Fitness in function of generation", "generation number", "fitness");
+        XYSeries series = new XYSeries("fluctuations");
+        List<Thread> seriesAdding = new ArrayList<>();
+        experiments.forEach(experiment ->
+                seriesAdding.add(new Thread(() -> series.add(experiment.getId(),experiment.getSolution().getFitness()))));
+        for(Thread t : seriesAdding) {
+            t.start();
+            t.join();
+        }
+        fitnessCollection.addSeries(series);
+        showGUI(fitnessCollection, "Fitness in function of experiment", "experiment number", "fitness");
     }
 
     private static void showGUI(XYSeriesCollection xySeriesCollection, String title, String XAxis, String YAxis) throws InvocationTargetException, InterruptedException {
