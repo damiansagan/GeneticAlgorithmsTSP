@@ -15,7 +15,7 @@ class ChartManager {
     private ChartPanel chartPanel;
 
     ChartManager(XYSeriesCollection dataset, String xAxis, String yAxis) {
-        chart = ChartFactory.createXYLineChart(null, // Title
+        chart = ChartFactory.createScatterPlot(null, // Title
                 xAxis, // X-Axis label
                 yAxis, // Y-Axis label
                 dataset, // Dataset

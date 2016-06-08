@@ -8,7 +8,7 @@ abstract class Experiment implements Runnable{
     Solution solution;
 
     public Experiment(Region region) {
-        this.id=++counter;
+        this.id=counter++;
         this.region = region;
     }
 
