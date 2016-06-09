@@ -8,10 +8,9 @@ class RandomXYRegion extends Region {
 
     private List<Point> locationOfCity;
 
-    RandomXYRegion(int numberOfCities){
+    RandomXYRegion(int numberOfCities, int maxXY){
         super(numberOfCities);
         Random generator = new Random();
-        int maxXY = 1000;
         this.locationOfCity= new ArrayList<>(numberOfCities);
         for (int i=0; i<numberOfCities; i++){
             int randX = generator.nextInt(maxXY)+1;
